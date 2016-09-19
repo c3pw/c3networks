@@ -5,11 +5,19 @@
 #include <QSortFilterProxyModel>
 
 class IfTableSortProxy : public QSortFilterProxyModel
-    {
-    public:
-        IfTableSortProxy(QObject *parent=0);
-    protected:
-        bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override;
-};
+	{
+	public:
+		IfTableSortProxy(QObject *parent=0);
+	protected:
+		bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override;
+
+		// QSortFilterProxyModel interface
+	protected:
+		bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const;
+
+		// QAbstractItemModel interface
+	public:
+		QVariant data(const QModelIndex& index, int role) const;
+	};
 
 #endif // IFTABLESORTPROXY_H

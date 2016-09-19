@@ -361,9 +361,6 @@
             </widget>
            </item>
            <item>
-            <widget class="QComboBox" name="ifTableFilterBox"/>
-           </item>
-           <item>
             <widget class="QLineEdit" name="ifTableFilterEdit"/>
            </item>
           </layout>

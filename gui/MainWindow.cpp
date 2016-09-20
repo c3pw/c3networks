@@ -39,6 +39,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     rightButtonMenu.insertAction(0,this->ui->actionChangeGroup);
     this->ui->ifTable->setContextMenuPolicy(Qt::CustomContextMenu);
     this->ui->ifTable->resizeColumnToContents(2);
+	this->ui->ifTableFilterBox->insertItem(0,tr("Ip Address"),IfTabeModel::IP);
+	this->ui->ifTableFilterBox->insertItem(1,tr("Host Name"),IfTabeModel::NAME);
+	this->ui->ifTableFilterBox->insertItem(2,tr("MAC Address"),IfTabeModel::MAC);
+	this->ui->ifTableFilterBox->insertItem(3,tr("User Name"),IfTabeModel::USERNAME);
+	this->ui->ifTableFilterBox->insertItem(4,tr("Location"),IfTabeModel::LOCATION);
+	this->ui->ifTableFilterBox->insertItem(5,tr("Domain"),IfTabeModel::HOSTDOMAIN);
+	this->ui->ifTableFilterBox->insertItem(6,tr("Description"),IfTabeModel::DESCRIPTION);
     }
 
 MainWindow::~MainWindow()
@@ -201,3 +208,18 @@ void MainWindow::on_actionExport_triggered()
             &ifDbTable,SLOT(exportAllToCSV(QString,bool,bool,bool,bool,bool,bool,bool,bool,bool,bool,bool,bool,QString)));
     w->show();
     }
+
+void MainWindow::on_ifTableFilterModeButton_toggled(bool checked)
+{
+	this->tableProxy->setAllColumnsFilter(checked);
+	this->ui->ifTableFilterBox->setEnabled(!checked);
+	this->tableProxy->setFilterRegExp("^.*"+this->ui->ifTableFilterEdit->text()+".*$");
+	this->ui->ifTable->reset();
+}
+
+void MainWindow::on_ifTableFilterBox_activated(int index)
+{
+Q_UNUSED(index)
+this->tableProxy->setFilterKeyColumn(this->ui->ifTableFilterBox->currentData().toInt());
+this->tableProxy->setFilterRegExp("^.*"+this->ui->ifTableFilterEdit->text()+".*$");
+}

@@ -92,6 +92,7 @@ bool DbFileItem::analizeFile(QWidget *parent)
             m.setIcon(QMessageBox::Critical);
             m.setText(tr("File corrupted."));
             m.exec();
+			q.clear();
             db.close();
             QSqlDatabase::removeDatabase("vCheck");
             return false;
@@ -114,6 +115,7 @@ bool DbFileItem::analizeFile(QWidget *parent)
                 message.append(QString::number(this->version));
                 m.setText(message);
                 m.exec();
+				q.clear();
                 db.close();
                 QSqlDatabase::removeDatabase("vCheck");
                 return false;
@@ -140,15 +142,21 @@ bool DbFileItem::analizeFile(QWidget *parent)
                         db.rollback();
                         }
                     db.close();
+
+					q.clear();
                     QSqlDatabase::removeDatabase("vCheck");
                     return ret;
                     }
                 db.close();
+
+				q.clear();
                 QSqlDatabase::removeDatabase("vCheck");
                 return false;
                 }
             }
-        db.close();
+
+		q.clear();
+		db.close();
         QSqlDatabase::removeDatabase("vCheck");
         }
     return true;
@@ -196,6 +204,7 @@ bool DbFileItem::executeScript(QSqlDatabase db, QString scriptFile)
             }
         qDebug()<<i;
         }
+	q.clear();
     return true;
     }
 

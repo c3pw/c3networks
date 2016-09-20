@@ -51,6 +51,10 @@ class MainWindow : public QMainWindow
 
 		void on_actionExport_triggered();
 
+		void on_ifTableFilterModeButton_toggled(bool checked);
+
+		void on_ifTableFilterBox_activated(int index);
+
 	private:
 		Ui::MainWindow *ui;
 		IfDbTable ifDbTable;

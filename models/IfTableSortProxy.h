@@ -18,6 +18,11 @@ class IfTableSortProxy : public QSortFilterProxyModel
 		// QAbstractItemModel interface
 	public:
 		QVariant data(const QModelIndex& index, int role) const;
-	};
+		bool getAllColumnsFilter() const;
+		void setAllColumnsFilter(bool value);
+
+private:
+		bool allColumnsFilter;
+};
 
 #endif // IFTABLESORTPROXY_H

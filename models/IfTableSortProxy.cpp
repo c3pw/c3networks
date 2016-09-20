@@ -8,7 +8,7 @@
 
 IfTableSortProxy::IfTableSortProxy(QObject *parent):QSortFilterProxyModel(parent)
 	{
-
+	this->allColumnsFilter = false;
 	}
 
 bool IfTableSortProxy::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const
@@ -24,26 +24,6 @@ bool IfTableSortProxy::lessThan(const QModelIndex &source_left, const QModelInde
 			}
 		else
 			{
-			/*
-			QRegExp ex("\\d+$");
-			QString sl =dataLeft.toString();
-			QString sr =dataRight.toString();
-
-			int il = ex.indexIn(sl);
-			int ir = ex.indexIn(sr);
-
-			if(il !=-1 && ir !=-1)
-				{
-				if(sl.mid(0,il) == sr.mid(0,ir))
-					{
-					int nl = sl.mid(il,sl.count()-il).toInt();
-					int nr = sr.mid(ir,sr.count()-ir).toInt();
-					return nl<nr;
-					}
-				}
-
-*/
-
 			return (QString::localeAwareCompare(dataLeft.toString(), dataRight.toString()) <0);
 			}
 		}
@@ -52,19 +32,27 @@ bool IfTableSortProxy::lessThan(const QModelIndex &source_left, const QModelInde
 
 bool IfTableSortProxy::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
 	{
-	if(this->sourceModel()!=NULL)
+	if(allColumnsFilter)
 		{
-		qDebug()<<"Filter columns: "<<this->sourceModel()->columnCount()<<" Filter regexp: "<<filterRegExp();
-		int col = this->sourceModel()->columnCount();
-		for(int i=0; i<col;i++)
+		if(this->sourceModel()!=NULL)
 			{
-			QModelIndex index = sourceModel()->index(source_row, i, source_parent);
-			if(index.data().toString().contains(this->filterRegExp()))
+			qDebug()<<"Filter columns: "<<this->sourceModel()->columnCount()<<" Filter regexp: "<<filterRegExp();
+			int col = this->sourceModel()->columnCount();
+			for(int i=0; i<col;i++)
 				{
-				return true;
+				QModelIndex index = sourceModel()->index(source_row, i, source_parent);
+				if(index.data().toString().contains(this->filterRegExp()))
+					{
+					return true;
+					}
 				}
+			return false;
 			}
-		return false;
+		}
+	else
+		{
+		QModelIndex index = sourceModel()->index(source_row, this->filterKeyColumn(), source_parent);
+		return index.data().toString().contains(this->filterRegExp());
 		}
 	return true;
 	}
@@ -72,17 +60,30 @@ bool IfTableSortProxy::filterAcceptsRow(int source_row, const QModelIndex& sourc
 QVariant IfTableSortProxy::data(const QModelIndex& index, int role) const
 	{
 	QVariant data = this->sourceModel()->data(this->mapToSource(index),role);
-	QString pattern = this->filterRegExp().pattern();
-	pattern = pattern.remove("\^\.\*");
-	pattern = pattern.remove("\.\*\$");
-	if(role == Qt::BackgroundColorRole && !pattern.isEmpty())
+	if(allColumnsFilter)
 		{
-
-		QString text = this->sourceModel()->data(this->mapToSource(index),Qt::DisplayRole).toString();
-		if(text.contains(this->filterRegExp()))
+		QString pattern = this->filterRegExp().pattern();
+		pattern = pattern.remove("\^\.\*");
+		pattern = pattern.remove("\.\*\$");
+		if(role == Qt::BackgroundColorRole && !pattern.isEmpty())
 			{
-			data = QColor(0, 255, 0, 50);
+
+			QString text = this->sourceModel()->data(this->mapToSource(index),Qt::DisplayRole).toString();
+			if(text.contains(this->filterRegExp()))
+				{
+				data = QColor(0, 255, 0, 50);
+				}
 			}
 		}
 	return data;
 	}
+
+bool IfTableSortProxy::getAllColumnsFilter() const
+{
+	return allColumnsFilter;
+}
+
+void IfTableSortProxy::setAllColumnsFilter(bool value)
+{
+	allColumnsFilter = value;
+}

@@ -38,7 +38,9 @@ SOURCES += main.cpp \
     gui/interfaces/ChangeGroupWindow.cpp \
     gui/validators/MacValidator.cpp \
     gui/interfaces/AddRangeWindow.cpp \
-    gui/ExportWindow.cpp
+    gui/ExportWindow.cpp \
+    gui/ExternalAppWindow.cpp \
+    gui/textCodecs/CP852PLCodec.cpp
 
 HEADERS  += \
     database/IfDbTable.h \
@@ -65,7 +67,9 @@ HEADERS  += \
     gui/interfaces/ChangeGroupWindow.h \
     gui/validators/MacValidator.h \
     gui/interfaces/AddRangeWindow.h \
-    gui/ExportWindow.h
+    gui/ExportWindow.h \
+    gui/ExternalAppWindow.h \
+    gui/textCodecs/CP852PLCodec.h
 
 FORMS    += \
     gui/MainWindow.ui \
@@ -78,7 +82,8 @@ FORMS    += \
     gui/SettingsWindow.ui \
     gui/interfaces/ChangeGroupWindow.ui \
     gui/interfaces/AddRangeWindow.ui \
-    gui/ExportWindow.ui
+    gui/ExportWindow.ui \
+    gui/ExternalAppWindow.ui
 
 CONFIG += c++11
 

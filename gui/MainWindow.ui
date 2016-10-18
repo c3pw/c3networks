@@ -518,7 +518,17 @@
     <addaction name="actionImport"/>
     <addaction name="actionExport"/>
    </widget>
+   <widget class="QMenu" name="menuActions">
+    <property name="title">
+     <string>Actions</string>
+    </property>
+    <addaction name="actionPing"/>
+    <addaction name="actionShowArp"/>
+    <addaction name="actionDNS1"/>
+    <addaction name="actionDNS2"/>
+   </widget>
    <addaction name="menuAdvanced"/>
+   <addaction name="menuActions"/>
    <addaction name="menuAbout"/>
   </widget>
   <action name="actionAbout_Application">
@@ -549,6 +559,26 @@
   <action name="actionExport">
    <property name="text">
     <string>Export</string>
+   </property>
+  </action>
+  <action name="actionPing">
+   <property name="text">
+    <string>Send PING</string>
+   </property>
+  </action>
+  <action name="actionShowArp">
+   <property name="text">
+    <string>Show ARP</string>
+   </property>
+  </action>
+  <action name="actionDNS1">
+   <property name="text">
+    <string>Ask DNS (by name)</string>
+   </property>
+  </action>
+  <action name="actionDNS2">
+   <property name="text">
+    <string>Ask DNS (by IP)</string>
    </property>
   </action>
  </widget>

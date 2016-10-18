@@ -55,12 +55,22 @@ class MainWindow : public QMainWindow
 
 		void on_ifTableFilterBox_activated(int index);
 
+		void on_actionPing_triggered();
+
+		void on_actionShowArp_triggered();
+
+		void on_actionDNS1_triggered();
+
+		void on_actionDNS2_triggered();
+
 	private:
 		Ui::MainWindow *ui;
 		IfDbTable ifDbTable;
 		IfTabeModel *tableModel;
 		IfTableSortProxy *tableProxy;
 		QMenu rightButtonMenu;
+
+		void executeApp(QString app, QStringList params);
 	signals:
 		void deleteInterfaces(QList<int> idx);
 	};

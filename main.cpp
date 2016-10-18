@@ -4,6 +4,7 @@
 
 #include <QDebug>
 #include <QFile>
+#include <QTextCodec>
 
 int main(int argc, char *argv[])
     {
@@ -11,8 +12,7 @@ int main(int argc, char *argv[])
     a.setApplicationVersion("0.0.1.1");
     a.setApplicationName("c3Network");
 
-
-
+QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
     SelectDbWindow w;
     w.show();
 

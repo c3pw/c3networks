@@ -11,7 +11,7 @@
 #include "../database/InterfaceItem.h"
 #include "groupsManager/GropusManagerWindow.h"
 
-
+#include "ExternalAppWindow.h"
 
 #include <QMessageBox>
 #include <QPointer>
@@ -37,6 +37,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     this->tableModel->loadData();
 
     rightButtonMenu.insertAction(0,this->ui->actionChangeGroup);
+	rightButtonMenu.addSeparator();
+	rightButtonMenu.addAction(this->ui->actionPing);
+	rightButtonMenu.addAction(this->ui->actionShowArp);
+	rightButtonMenu.addAction(this->ui->actionDNS1);
+	rightButtonMenu.addAction(this->ui->actionDNS2);
+
     this->ui->ifTable->setContextMenuPolicy(Qt::CustomContextMenu);
     this->ui->ifTable->resizeColumnToContents(2);
 	this->ui->ifTableFilterBox->insertItem(0,tr("Ip Address"),IfTabeModel::IP);
@@ -222,4 +228,84 @@ void MainWindow::on_ifTableFilterBox_activated(int index)
 Q_UNUSED(index)
 this->tableProxy->setFilterKeyColumn(this->ui->ifTableFilterBox->currentData().toInt());
 this->tableProxy->setFilterRegExp("^.*"+this->ui->ifTableFilterEdit->text()+".*$");
+}
+
+void MainWindow::on_actionPing_triggered()
+{
+	QList<QModelIndex> list = this->ui->ifTable->selectionModel()->selectedRows();
+	if(list.count()>0)
+		{
+		for(int i=0; i< list.count();i++)
+			{
+			QPointer<InterfaceItem> item = tableModel->getInterfaceItem(tableProxy->mapToSource(list.at(i)));
+			if(!item.isNull())
+				{
+				QStringList params;
+				params << QHostAddress(item->getIpAddress()).toString();
+				executeApp("ping",params);
+				}
+			}
+		}
+	}
+
+void MainWindow::executeApp(QString app, QStringList params)
+	{
+	ExternalAppWindow *w = new ExternalAppWindow(this);
+	w->setAttribute(Qt::WA_DeleteOnClose);
+	w->executeApp(app,params);
+	}
+
+void MainWindow::on_actionShowArp_triggered()
+{
+	QList<QModelIndex> list = this->ui->ifTable->selectionModel()->selectedRows();
+	if(list.count()>0)
+		{
+		for(int i=0; i< list.count();i++)
+			{
+			QPointer<InterfaceItem> item = tableModel->getInterfaceItem(tableProxy->mapToSource(list.at(i)));
+			if(!item.isNull())
+				{
+				QStringList params;
+				params <<"-a";
+				params << QHostAddress(item->getIpAddress()).toString();
+				executeApp("arp",params);
+				}
+			}
+		}
+}
+
+void MainWindow::on_actionDNS1_triggered()
+{
+	QList<QModelIndex> list = this->ui->ifTable->selectionModel()->selectedRows();
+	if(list.count()>0)
+		{
+		for(int i=0; i< list.count();i++)
+			{
+			QPointer<InterfaceItem> item = tableModel->getInterfaceItem(tableProxy->mapToSource(list.at(i)));
+			if(!item.isNull() && !item->getName().trimmed().isEmpty())
+				{
+				QStringList params;
+				params << item->getName();
+				executeApp("nslookup",params);
+				}
+			}
+		}
+}
+
+void MainWindow::on_actionDNS2_triggered()
+{
+	QList<QModelIndex> list = this->ui->ifTable->selectionModel()->selectedRows();
+	if(list.count()>0)
+		{
+		for(int i=0; i< list.count();i++)
+			{
+			QPointer<InterfaceItem> item = tableModel->getInterfaceItem(tableProxy->mapToSource(list.at(i)));
+			if(!item.isNull() && !item->getName().trimmed().isEmpty())
+				{
+				QStringList params;
+				params << QHostAddress(item->getIpAddress()).toString();
+				executeApp("nslookup",params);
+				}
+			}
+		}
 }

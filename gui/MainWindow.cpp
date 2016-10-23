@@ -20,6 +20,7 @@
 #include <QHostAddress>
 
 #include "global/LocalSettings.h"
+#include "ifTypeManager/IfTypeManagerWindow.h"
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
     {
@@ -107,13 +108,6 @@ void MainWindow::on_buttonEditHost_clicked()
             w->updateInterface(item->getId());
             }
         }
-    }
-
-void MainWindow::on_buttonGroupsManager_clicked()
-    {
-    GropusManagerWindow *w = new GropusManagerWindow(this);
-    w->setAttribute(Qt::WA_DeleteOnClose);
-    w->show();
     }
 
 void MainWindow::on_ifTable_doubleClicked(const QModelIndex &index)
@@ -361,4 +355,19 @@ void MainWindow::on_tabWidget_currentChanged(int index)
 		{
 		this->ui->filterWidget->show();
 		}
+}
+
+void MainWindow::on_actionDevice_Groups_triggered()
+{
+	GropusManagerWindow *w = new GropusManagerWindow(this);
+	w->setAttribute(Qt::WA_DeleteOnClose);
+	w->show();
+}
+
+void MainWindow::on_actionInterface_Types_triggered()
+{
+	IfTypeManagerWindow *w = new IfTypeManagerWindow(this);
+	w->setAttribute(Qt::WA_DeleteOnClose);
+	w->show();
+
 }

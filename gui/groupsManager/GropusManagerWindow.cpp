@@ -31,6 +31,8 @@ void GropusManagerWindow::on_buttonClose_clicked()
 void GropusManagerWindow::on_buttonAddGroup_clicked()
 	{
 	AddEditGroupWindow * form = new AddEditGroupWindow(this);
+
+	form->setAttribute(Qt::WA_DeleteOnClose);
 	connect(form,SIGNAL(addGroup(QString,QString)),this->model,SLOT(addGroup(QString,QString)));
 	form->show();
 	}
@@ -40,6 +42,8 @@ void GropusManagerWindow::on_buttonEditGroup_clicked()
 	if(this->ui->listView->currentIndex().row()>=0)
 		{
 		AddEditGroupWindow * form = new AddEditGroupWindow(this);
+
+		form->setAttribute(Qt::WA_DeleteOnClose);
 		connect(form,SIGNAL(updateGroup(int,QString,QString)),this->model,SLOT(updateGroup(int,QString,QString)));
 		form->editShow(((GroupItem*)this->ui->listView->currentIndex().internalPointer())->getId());
 		}

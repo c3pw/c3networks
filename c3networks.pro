@@ -43,7 +43,11 @@ SOURCES += main.cpp \
     gui/textCodecs/CP852PLCodec.cpp \
     global/LocalSettings.cpp \
     database/DatabaseUpdater.cpp \
-    gui/selectDb/DatabaseUpdateWindow.cpp
+    gui/selectDb/DatabaseUpdateWindow.cpp \
+    database/InterfaceTypeItem.cpp \
+    models/IfTypeTableModel.cpp \
+    gui/ifTypeManager/IfTypeManagerWindow.cpp \
+    gui/ifTypeManager/AddEditIfTypeWindow.cpp
 
 HEADERS  += \
     database/IfDbTable.h \
@@ -75,7 +79,11 @@ HEADERS  += \
     gui/textCodecs/CP852PLCodec.h \
     global/LocalSettings.h \
     database/DatabaseUpdater.h \
-    gui/selectDb/DatabaseUpdateWindow.h
+    gui/selectDb/DatabaseUpdateWindow.h \
+    database/InterfaceTypeItem.h \
+    models/IfTypeTableModel.h \
+    gui/ifTypeManager/IfTypeManagerWindow.h \
+    gui/ifTypeManager/AddEditIfTypeWindow.h
 
 FORMS    += \
     gui/MainWindow.ui \
@@ -90,7 +98,9 @@ FORMS    += \
     gui/interfaces/AddRangeWindow.ui \
     gui/ExportWindow.ui \
     gui/ExternalAppWindow.ui \
-    gui/selectDb/DatabaseUpdateWindow.ui
+    gui/selectDb/DatabaseUpdateWindow.ui \
+    gui/ifTypeManager/IfTypeManagerWindow.ui \
+    gui/ifTypeManager/AddEditIfTypeWindow.ui
 
 CONFIG += c++11
 

@@ -33,8 +33,6 @@ class MainWindow : public QMainWindow
 
 		void on_buttonEditHost_clicked();
 
-		void on_buttonGroupsManager_clicked();
-
 		void on_ifTable_doubleClicked(const QModelIndex &index);
 
 		void on_actionAbout_Application_triggered();
@@ -66,6 +64,10 @@ class MainWindow : public QMainWindow
 		void on_actionDNS2_triggered();
 
 		void on_tabWidget_currentChanged(int index);
+
+		void on_actionDevice_Groups_triggered();
+
+		void on_actionInterface_Types_triggered();
 
 	private:
 		Ui::MainWindow *ui;

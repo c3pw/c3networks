@@ -156,23 +156,6 @@
           </widget>
          </item>
          <item>
-          <widget class="Line" name="line">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="buttonGroupsManager">
-           <property name="text">
-            <string>Groups Manager</string>
-           </property>
-           <property name="flat">
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
           <widget class="Line" name="line_2">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
@@ -526,8 +509,16 @@
     <addaction name="actionDNS1"/>
     <addaction name="actionDNS2"/>
    </widget>
+   <widget class="QMenu" name="menuDictionaries">
+    <property name="title">
+     <string>Dictionaries</string>
+    </property>
+    <addaction name="actionDevice_Groups"/>
+    <addaction name="actionInterface_Types"/>
+   </widget>
    <addaction name="menuActions"/>
    <addaction name="menuAdvanced"/>
+   <addaction name="menuDictionaries"/>
    <addaction name="menuAbout"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
@@ -579,6 +570,21 @@
   <action name="actionDNS2">
    <property name="text">
     <string>Ask DNS (by IP)</string>
+   </property>
+  </action>
+  <action name="actionDevice_Types">
+   <property name="text">
+    <string>Device Types</string>
+   </property>
+  </action>
+  <action name="actionInterface_Types">
+   <property name="text">
+    <string>Interface Types</string>
+   </property>
+  </action>
+  <action name="actionDevice_Groups">
+   <property name="text">
+    <string>Device Groups</string>
    </property>
   </action>
  </widget>

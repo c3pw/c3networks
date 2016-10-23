@@ -19,10 +19,14 @@
 #include <QDebug>
 #include <QHostAddress>
 
+#include "global/LocalSettings.h"
+
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
     {
     ui->setupUi(this);
-    this->ui->menuBar->insertAction(this->ui->menuBar->actions().first(),this->ui->actionSettings);
+	this->ui->menuBar->insertAction(this->ui->menuBar->actions().at(2),this->ui->actionSettings);
+
+	this->ui->statusBar->addWidget(&(this->dbNameLabel));
 
     this->tableModel = new IfTabeModel();
     connect(&ifDbTable,SIGNAL(prepareToModelReset()),this,SLOT(prepareToModelReset()));
@@ -52,6 +56,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 	this->ui->ifTableFilterBox->insertItem(4,tr("Location"),IfTabeModel::LOCATION);
 	this->ui->ifTableFilterBox->insertItem(5,tr("Domain"),IfTabeModel::HOSTDOMAIN);
 	this->ui->ifTableFilterBox->insertItem(6,tr("Description"),IfTabeModel::DESCRIPTION);
+
+	this->ui->tabWidget->setCurrentIndex(0);
+
+	loadSettings();
     }
 
 MainWindow::~MainWindow()
@@ -116,8 +124,13 @@ void MainWindow::on_ifTable_doubleClicked(const QModelIndex &index)
 
 void MainWindow::prepareToModelReset()
     {
-    this->tableModel->loadData();
-    }
+	this->tableModel->loadData();
+	}
+
+void MainWindow::setDbName(QString name)
+	{
+	this->dbNameLabel.setText(tr("Database: ")+name);
+	}
 
 void MainWindow::on_actionAbout_Application_triggered()
     {
@@ -221,13 +234,23 @@ void MainWindow::on_ifTableFilterModeButton_toggled(bool checked)
 	this->ui->ifTableFilterBox->setEnabled(!checked);
 	this->tableProxy->setFilterRegExp("^.*"+this->ui->ifTableFilterEdit->text()+".*$");
 	this->ui->ifTable->reset();
+	LocalSettings s;
+	if(checked)
+		{
+		s.setValue("FilterMethod","AllColumns");
+		}
+	else
+		{
+		s.setValue("FilterMethod",this->ui->ifTableFilterBox->currentIndex());
+		}
 }
 
 void MainWindow::on_ifTableFilterBox_activated(int index)
 {
-Q_UNUSED(index)
 this->tableProxy->setFilterKeyColumn(this->ui->ifTableFilterBox->currentData().toInt());
 this->tableProxy->setFilterRegExp("^.*"+this->ui->ifTableFilterEdit->text()+".*$");
+LocalSettings s;
+s.setValue("FilterMethod",index);
 }
 
 void MainWindow::on_actionPing_triggered()
@@ -250,9 +273,27 @@ void MainWindow::on_actionPing_triggered()
 
 void MainWindow::executeApp(QString app, QStringList params)
 	{
-	ExternalAppWindow *w = new ExternalAppWindow(this);
+	ExternalAppWindow *w = new ExternalAppWindow();
 	w->setAttribute(Qt::WA_DeleteOnClose);
 	w->executeApp(app,params);
+	}
+
+void MainWindow::loadSettings()
+	{
+	LocalSettings s;
+	if(s.value("rememberFilterMode").toBool())
+		{
+		QString fm = s.value("FilterMethod").toString();
+		if(fm == "AllColumns")
+			{
+			this->ui->ifTableFilterModeButton->setChecked(true);
+			}
+		else
+			{
+			this->ui->ifTableFilterBox->setCurrentIndex(fm.toInt());
+			this->ui->ifTableFilterModeButton->setChecked(false);
+			}
+		}
 	}
 
 void MainWindow::on_actionShowArp_triggered()
@@ -307,5 +348,17 @@ void MainWindow::on_actionDNS2_triggered()
 				executeApp("nslookup",params);
 				}
 			}
+		}
+}
+
+void MainWindow::on_tabWidget_currentChanged(int index)
+{
+	if(index!=0)
+		{
+		this->ui->filterWidget->hide();
+		}
+	else
+		{
+		this->ui->filterWidget->show();
 		}
 }

@@ -1,38 +1,38 @@
 #include "GroupItem.h"
 
 GroupItem::GroupItem()
-    {
-    }
+	{
+	}
 
 int GroupItem::getId() const
-    {
-    return id;
-    }
+	{
+	return id;
+	}
 
 void GroupItem::setId(int value)
-    {
-    id = value;
-    }
+	{
+	id = value;
+	}
 
 QString GroupItem::getName() const
-    {
-    return name;
-    }
+	{
+	return name;
+	}
 
 void GroupItem::setName(const QString &value)
-    {
-    name = value;
-    }
+	{
+	name = value;
+	}
 
 QString GroupItem::getColor() const
-    {
-    return color;
-    }
+	{
+	return color;
+	}
 
 void GroupItem::setColor(const QString &value)
-    {
-    color = value;
-    }
+	{
+	color = value;
+	}
 
 
 

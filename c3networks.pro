@@ -11,7 +11,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = c3Networks
 TEMPLATE = app
 
-VERSION = 0.0.1.1
+VERSION = 0.0.1.2
 
 SOURCES += main.cpp \
     database/IfDbTable.cpp \
@@ -40,7 +40,10 @@ SOURCES += main.cpp \
     gui/interfaces/AddRangeWindow.cpp \
     gui/ExportWindow.cpp \
     gui/ExternalAppWindow.cpp \
-    gui/textCodecs/CP852PLCodec.cpp
+    gui/textCodecs/CP852PLCodec.cpp \
+    global/LocalSettings.cpp \
+    database/DatabaseUpdater.cpp \
+    gui/selectDb/DatabaseUpdateWindow.cpp
 
 HEADERS  += \
     database/IfDbTable.h \
@@ -69,7 +72,10 @@ HEADERS  += \
     gui/interfaces/AddRangeWindow.h \
     gui/ExportWindow.h \
     gui/ExternalAppWindow.h \
-    gui/textCodecs/CP852PLCodec.h
+    gui/textCodecs/CP852PLCodec.h \
+    global/LocalSettings.h \
+    database/DatabaseUpdater.h \
+    gui/selectDb/DatabaseUpdateWindow.h
 
 FORMS    += \
     gui/MainWindow.ui \
@@ -83,7 +89,8 @@ FORMS    += \
     gui/interfaces/ChangeGroupWindow.ui \
     gui/interfaces/AddRangeWindow.ui \
     gui/ExportWindow.ui \
-    gui/ExternalAppWindow.ui
+    gui/ExternalAppWindow.ui \
+    gui/selectDb/DatabaseUpdateWindow.ui
 
 CONFIG += c++11
 
@@ -103,4 +110,5 @@ DISTFILES += \
     resources/create.sql \
     resources/u1to2.sql \
     resources/u2to3.sql \
-    c3Network.ico
+    c3Network.ico \
+    resources/u3to4.sql

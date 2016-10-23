@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QScrollBar>
 #include "textCodecs/CP852PLCodec.h"
+#include "../global/LocalSettings.h"
 
 ExternalAppWindow::ExternalAppWindow(QWidget *parent) : QDialog(parent), ui(new Ui::ExternalAppWindow)
 	{
@@ -21,10 +22,11 @@ void ExternalAppWindow::executeApp(QString app, QStringList params)
 		{
 		p.append(" ").append(params.at(i));
 		}
-	this->ui->plainTextEdit->appendPlainText("EXECUTE: "+app+p+"\n----------------------------------\n\n");
+	ap = app+p;
+	this->ui->plainTextEdit->appendPlainText("EXECUTE: "+ap+"\n----------------------------------\n\n");
 	this->process->start(app,params);
 
-
+	this->setWindowTitle(ap+" - WORKING");
 
 	}
 
@@ -36,8 +38,16 @@ ExternalAppWindow::~ExternalAppWindow()
 
 void ExternalAppWindow::onStdoutAvailable()
 	{
-	QString str = CP852PLCodec::fromCP852PL(this->process->readAll());
-	this->ui->plainTextEdit->insertPlainText(str);
+	LocalSettings l;
+	if(l.value("cp852conversion").toBool())
+		{
+		QString str = CP852PLCodec::fromCP852PL(this->process->readAll());
+		this->ui->plainTextEdit->insertPlainText(str);
+		}
+	else
+		{
+		this->ui->plainTextEdit->insertPlainText(this->process->readAll());
+		}
 
 
 	QScrollBar *sb = this->ui->plainTextEdit->verticalScrollBar();
@@ -46,10 +56,5 @@ void ExternalAppWindow::onStdoutAvailable()
 
 void ExternalAppWindow::onFinished(int, QProcess::ExitStatus)
 	{
-	this->setWindowTitle("Finished");
-	QFile f("d:/test_stream.txt");
-	f.open(QIODevice::WriteOnly);
-	QDataStream s(&f);
-	s<<this->ui->plainTextEdit->toPlainText();
-	f.close();
+	this->setWindowTitle(ap+" - FINISHED");
 	}

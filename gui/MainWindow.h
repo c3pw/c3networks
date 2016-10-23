@@ -6,6 +6,7 @@
 #include "../database/IfDbTable.h"
 #include "../models/IfTabeModel.h"
 #include "../models/IfTableSortProxy.h"
+#include <QLabel>
 
 
 namespace Ui {
@@ -22,6 +23,7 @@ class MainWindow : public QMainWindow
 
 	public slots:
 		void prepareToModelReset();
+		void setDbName(QString name);
 	private slots:
 		void on_ifTableFilterEdit_textChanged(const QString &arg1);
 
@@ -63,14 +65,18 @@ class MainWindow : public QMainWindow
 
 		void on_actionDNS2_triggered();
 
+		void on_tabWidget_currentChanged(int index);
+
 	private:
 		Ui::MainWindow *ui;
 		IfDbTable ifDbTable;
 		IfTabeModel *tableModel;
 		IfTableSortProxy *tableProxy;
 		QMenu rightButtonMenu;
+		QLabel dbNameLabel;
 
 		void executeApp(QString app, QStringList params);
+		void loadSettings();
 	signals:
 		void deleteInterfaces(QList<int> idx);
 	};

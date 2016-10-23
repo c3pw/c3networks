@@ -2,8 +2,9 @@
 #define SELECTDBWINDOW_H
 
 #include <QDialog>
-#include "../models/DbFileModel.h"
+#include "selectDb/DatabaseUpdateWindow.h"
 #include "helpers/HtmlHelper.h"
+#include "../models/DbFileModel.h"
 
 namespace Ui {
 class SelectDbWindow;

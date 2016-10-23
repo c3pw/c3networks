@@ -12,6 +12,13 @@ CREATE TABLE devices
     icon integer default 0
     );
 
+CREATE TABLE interfaces
+    (
+    id integer primary key autoincrement,
+    name varchar(256) not null,
+    icon blob default null
+    );
+
 CREATE TABLE hosts
     (
     id integer primary key autoincrement,
@@ -27,8 +34,10 @@ CREATE TABLE hosts
     location description text default '',
     dhcpReservation numeric default 0,
     deviceId integer default null,
+    interfaceId integer default null,
     FOREIGN KEY(groupId) REFERENCES groups(id),
-    FOREIGN KEY(deviceID) REFERENCES devices(id)
+    FOREIGN KEY(deviceId) REFERENCES devices(id),
+    FOREIGN KEY(interfaceId) REFERENCES interfaces(id)
     );
 CREATE TABLE versions
     (
@@ -36,4 +45,4 @@ CREATE TABLE versions
     time datetime not null
     );
 
-insert into versions values(3,datetime('now'));
+insert into versions values(4,datetime('now'));

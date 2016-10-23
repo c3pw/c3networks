@@ -8,23 +8,17 @@
 #include "../validators/NetMaskValidator.h"
 #include <QCompleter>
 
-namespace Ui {
-class AddRangeWindow;
-}
+namespace Ui { class AddRangeWindow; }
 
 class AddRangeWindow : public QDialog
     {
         Q_OBJECT
-
     public:
         explicit AddRangeWindow(QWidget *parent = 0);
         ~AddRangeWindow();
-
     private slots:
         void on_button_apply_clicked();
-
         void on_button_cancel_clicked();
-
     private:
         Ui::AddRangeWindow *ui;
         quint32 network;

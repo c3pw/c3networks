@@ -2,6 +2,8 @@
 #define SETTINGSWINDOW_H
 
 #include <QDialog>
+#include <QColorDialog>
+#include <QMenu>
 
 namespace Ui {
 class SettingsWindow;
@@ -18,8 +20,17 @@ public:
 private slots:
     void on_buttonCancel_clicked();
 
-private:
+	void on_buttonSave_clicked();
+
+	void on_filterHilightColorButton_clicked();
+
+	void filterHilightColor_changed(QColor);
+
+	void loadSettings();
+
+	private:
     Ui::SettingsWindow *ui;
+	QColorDialog filterHilightColorDialog;
 };
 
 #endif // SETTINGSWINDOW_H

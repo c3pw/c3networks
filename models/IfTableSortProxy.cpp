@@ -5,6 +5,7 @@
 #include <QRegularExpression>
 #include <QRegularExpressionMatch>
 #include <QColor>
+#include "../global/LocalSettings.h"
 
 IfTableSortProxy::IfTableSortProxy(QObject *parent):QSortFilterProxyModel(parent)
 	{
@@ -71,7 +72,16 @@ QVariant IfTableSortProxy::data(const QModelIndex& index, int role) const
 			QString text = this->sourceModel()->data(this->mapToSource(index),Qt::DisplayRole).toString();
 			if(text.contains(this->filterRegExp()))
 				{
-				data = QColor(0, 255, 0, 50);
+				LocalSettings s;
+				QString str = s.value("filterHilightColor").toString();
+				if(str.isEmpty())
+					{
+					data = QColor(0, 255, 0, 50);
+					}
+				else
+					{
+					data = QColor(str);
+					}
 				}
 			}
 		}

@@ -3,32 +3,38 @@
 
 #include <QObject>
 #include <QSqlDatabase>
+#include "DatabaseUpdater.h"
+
+class DatabaseUpdater;
 
 class DbFileItem : public QObject
-    {
-        Q_OBJECT
-    public:
-        DbFileItem(QObject *parent = 0);
-        DbFileItem(const DbFileItem &source, QObject *parent = 0);
-        void operator =(const DbFileItem &source);
+	{
+		Q_OBJECT
+	public:
+		DbFileItem(QObject *parent = 0);
+		DbFileItem(const DbFileItem &source, QObject *parent = 0);
+		void operator =(const DbFileItem &source);
 
-        static const int version = 3;
+		static const int version = 4;
 
-        QString getFileName() const;
-        void setFileName(const QString &value);
-        QString getDescription() const;
-        void setDescription(const QString &value);
-        QString getName() const;
-        void setName(const QString &value);
+		QString getFileName() const;
+		void setFileName(const QString &value);
+		QString getDescription() const;
+		void setDescription(const QString &value);
+		QString getName() const;
+		void setName(const QString &value);
 
-        bool openDbConnection();
-        bool analizeFile(QWidget* parent=0);
-    private:
-        QString fileName;
-        QString description;
-        QString name;
-        bool update(QSqlDatabase db, int version);
-        bool executeScript(QSqlDatabase db, QString scriptFile);
-    };
+		bool fileExists();
+		int getDatabaseVersion();
+		bool isUpdateRequired();
+
+	private:
+		QString fileName;
+		QString description;
+		QString name;
+		QStringList prepareUpdateScript();
+
+		friend DatabaseUpdater;
+	};
 
 #endif // DBFILEITEM_H

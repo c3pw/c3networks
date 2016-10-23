@@ -44,7 +44,20 @@ QVariant DbFileModel::data(const QModelIndex &index, int role) const
             {
             QString str;
             str.append("<b>").append(item.getName()).append("</b>");
-            str.append("<br/><i>").append(item.getDescription()).append("</i>");
+			if(!item.fileExists())
+				{
+				str.append(" - <span style=\"color:red;\"><b><i>").append(tr("File doesn't exist.")).append("</i></b></span>");
+				}
+			else
+				{
+				str.append("<br/><i> File version: ").append(QString::number(item.getDatabaseVersion())).append("</i>");
+				if(item.isUpdateRequired())
+					{
+					str.append(" - <span style=\"color:orange;\"><b><i>").append(tr("Update is required.")).append("</i></b></span>");
+					}
+				}
+
+			str.append("<br/><i>").append(item.getDescription().trimmed()).append("</i>");
             return str;
             }
         if(role == Qt::ToolTipRole)

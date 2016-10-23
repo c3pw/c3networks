@@ -22,6 +22,7 @@ class ExternalAppWindow : public QDialog
 	private:
 		Ui::ExternalAppWindow *ui;
 		QProcess *process;
+		QString ap;
 	};
 
 #endif // EXTERNALAPPWINDOW_H

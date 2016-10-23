@@ -4,7 +4,9 @@
 
 #include <QMessageBox>
 #include "selectDb/AddEditDbFileWindow.h"
+#include "database/DatabaseUpdater.h"
 
+#include <QSqlDatabase>
 #include <QDebug>
 
 SelectDbWindow::SelectDbWindow(QWidget *parent) : QDialog(parent), ui(new Ui::SelectDbWindow)
@@ -42,22 +44,44 @@ void SelectDbWindow::on_listDb_clicked(const QModelIndex &index)
 void SelectDbWindow::on_buttonConfirm_clicked()
 	{
 	DbFileItem item = model.getDbFileItem(this->ui->listDb->currentIndex());
-	if(item.analizeFile())
+	if(item.fileExists())
 		{
-		if(item.openDbConnection())
+		if(item.isUpdateRequired())
 			{
-			MainWindow *w = new MainWindow();
-			w->setAttribute(Qt::WA_DeleteOnClose);
-			w->show();
-			this->close();
+			QMessageBox box;
+			box.setWindowTitle(tr("Update"));
+			box.setText(tr("This file is in old version.\nWould You like to update?"));
+			box.setIcon(QMessageBox::Question);
+			box.setStandardButtons(QMessageBox::No|QMessageBox::Yes);
+			box.setDefaultButton(QMessageBox::No);
+			if(box.exec()==QMessageBox::Yes)
+				{
+				DatabaseUpdateWindow *window = new DatabaseUpdateWindow(this);
+				window->setAttribute(Qt::WA_DeleteOnClose);
+				window->update(item);
+				}
 			}
 		else
 			{
-			QMessageBox box;
-			box.setWindowTitle(tr("Error"));
-			box.setText(tr("Can't open file with database."));
-			box.setIcon(QMessageBox::Critical);
-			box.exec();
+			QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+			db.setDatabaseName(item.getFileName());
+			if(db.open())
+				{
+				MainWindow *w = new MainWindow();
+				w->setAttribute(Qt::WA_DeleteOnClose);
+				w->setDbName(item.getName());
+				w->show();
+				this->close();
+				}
+			else
+				{
+				QMessageBox box;
+				box.setWindowTitle(tr("Error"));
+				box.setText(tr("Can't open file with database."));
+				box.setIcon(QMessageBox::Critical);
+				box.exec();
+				}
+
 			}
 		}
 	}

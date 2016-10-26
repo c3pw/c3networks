@@ -48,15 +48,17 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 	rightButtonMenu.addAction(this->ui->actionDNS1);
 	rightButtonMenu.addAction(this->ui->actionDNS2);
 
-    this->ui->ifTable->setContextMenuPolicy(Qt::CustomContextMenu);
-    this->ui->ifTable->resizeColumnToContents(2);
+	this->ui->ifTable->setContextMenuPolicy(Qt::CustomContextMenu);
+	this->ui->ifTable->resizeColumnToContents(IfTabeModel::IFTYPE);
+	this->ui->ifTable->resizeColumnToContents(IfTabeModel::DHCPRESERVATION);
 	this->ui->ifTableFilterBox->insertItem(0,tr("Ip Address"),IfTabeModel::IP);
 	this->ui->ifTableFilterBox->insertItem(1,tr("Host Name"),IfTabeModel::NAME);
-	this->ui->ifTableFilterBox->insertItem(2,tr("MAC Address"),IfTabeModel::MAC);
-	this->ui->ifTableFilterBox->insertItem(3,tr("User Name"),IfTabeModel::USERNAME);
-	this->ui->ifTableFilterBox->insertItem(4,tr("Location"),IfTabeModel::LOCATION);
-	this->ui->ifTableFilterBox->insertItem(5,tr("Domain"),IfTabeModel::HOSTDOMAIN);
-	this->ui->ifTableFilterBox->insertItem(6,tr("Description"),IfTabeModel::DESCRIPTION);
+	this->ui->ifTableFilterBox->insertItem(2,tr("Interface Type"),IfTabeModel::IFTYPE);
+	this->ui->ifTableFilterBox->insertItem(3,tr("MAC Address"),IfTabeModel::MAC);
+	this->ui->ifTableFilterBox->insertItem(4,tr("User Name"),IfTabeModel::USERNAME);
+	this->ui->ifTableFilterBox->insertItem(5,tr("Location"),IfTabeModel::LOCATION);
+	this->ui->ifTableFilterBox->insertItem(6,tr("Domain"),IfTabeModel::HOSTDOMAIN);
+	this->ui->ifTableFilterBox->insertItem(7,tr("Description"),IfTabeModel::DESCRIPTION);
 
 	this->ui->tabWidget->setCurrentIndex(0);
 
@@ -84,8 +86,8 @@ void MainWindow::on_pushButton_clicked()
     {
     AddEditIfWindow *w = new AddEditIfWindow(this);
     w->setAttribute(Qt::WA_DeleteOnClose);
-    connect(w,SIGNAL(addInterface(quint32,quint32,QString,QString,QString,QString,QString,bool,int,QString,bool)),
-            &ifDbTable,SLOT(addInterface(quint32,quint32,QString,QString,QString,QString,QString,bool,int,QString,bool)));
+	connect(w,SIGNAL(addInterface(quint32,quint32,QString,QString,QString,QString,QString,bool,int,QString,bool,int)),
+			&ifDbTable,SLOT(addInterface(quint32,quint32,QString,QString,QString,QString,QString,bool,int,QString,bool,int)));
     w->addInterface();
     }
 
@@ -103,8 +105,8 @@ void MainWindow::on_buttonEditHost_clicked()
             {
             AddEditIfWindow *w = new AddEditIfWindow(this);
             w->setAttribute(Qt::WA_DeleteOnClose);
-            connect(w,SIGNAL(updateInterface(int,quint32,quint32,QString,QString,QString,QString,QString,bool,int,QString,bool)),
-                    &ifDbTable,SLOT(updateInterface(int,quint32,quint32,QString,QString,QString,QString,QString,bool,int,QString,bool)));
+			connect(w,SIGNAL(updateInterface(int,quint32,quint32,QString,QString,QString,QString,QString,bool,int,QString,bool,int)),
+					&ifDbTable,SLOT(updateInterface(int,quint32,quint32,QString,QString,QString,QString,QString,bool,int,QString,bool,int)));
             w->updateInterface(item->getId());
             }
         }
@@ -368,6 +370,7 @@ void MainWindow::on_actionInterface_Types_triggered()
 {
 	IfTypeManagerWindow *w = new IfTypeManagerWindow(this);
 	w->setAttribute(Qt::WA_DeleteOnClose);
+	connect(w,SIGNAL(refreshDatabase()),this->tableModel,SLOT(loadData()));
 	w->show();
 
 }

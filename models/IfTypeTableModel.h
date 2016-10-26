@@ -20,7 +20,8 @@ class IfTypeTableModel : public QAbstractListModel
 
 		QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 		InterfaceTypeItem* getItem(int index);
-
+		void setComboMode(bool mode);
+		int idRow(int id);
 	public slots:
 		void loadData();
 		void insert(QString name, QPixmap icon);
@@ -31,6 +32,7 @@ class IfTypeTableModel : public QAbstractListModel
 		void modelReset();
 	private:
 		QList<InterfaceTypeItem*> source;
+		bool comboMode;
 	};
 
 #endif // IFTYPETABLEMODEL_H

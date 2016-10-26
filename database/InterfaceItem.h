@@ -50,6 +50,12 @@ class InterfaceItem : public QObject
 		bool getDhcpReservation() const;
 		void setDhcpReservation(bool value);
 
+		int getInterfaceType() const;
+		void setInterfaceType(int value);
+
+		QString getInterfaceTypeName() const;
+		void setInterfaceTypeName(const QString& value);
+
 	private:
 		int id;
 		quint32 ipAddress;
@@ -65,6 +71,8 @@ class InterfaceItem : public QObject
 		QString color;
 		QString location;
 		bool dhcpReservation;
+		int interfaceType;
+		QString interfaceTypeName;
 	};
 
 #endif // INTERFACEITEM_H

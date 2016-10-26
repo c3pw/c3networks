@@ -19,6 +19,10 @@ AddEditIfWindow::AddEditIfWindow(QWidget *parent) : QDialog(parent), ui(new Ui::
 		masks.append(number);
 		}
 
+	typeModel.setComboMode(true);
+	typeModel.loadData();
+	this->ui->comboIfType->setModel(&typeModel);
+
 	nameCompleter = new QCompleter(IfDbTable::getHostNameSet(),this);
 	this->ui->edit_name->setCompleter(nameCompleter);
 
@@ -63,7 +67,7 @@ void AddEditIfWindow::updateInterface(int id)
 	this->id=id;
 	QSqlQuery query("select * from hosts where id=:id");
 	query.bindValue(0,id);
-	if(query.exec() && query.next())
+	if(query.exec() && query.first())
 		{
 		this->ui->edit_ip->setText(QHostAddress(query.value("ipAddress").toUInt()).toString());
 		this->ui->edit_mask->setText(QHostAddress(query.value("mask").toUInt()).toString());
@@ -75,6 +79,7 @@ void AddEditIfWindow::updateInterface(int id)
 		this->ui->edit_description->setPlainText(query.value("description").toString());
 		this->ui->edit_location->setText(query.value("location").toString());
 		this->ui->comboGroup->setCurrentIndex(this->model.idRow(query.value("groupId").toInt()));
+		this->ui->comboIfType->setCurrentIndex(this->typeModel.idRow(query.value("interfaceId").toInt()));
 		this->ui->check_dhcpReservation->setChecked(query.value("dhcpReservation").toInt()!=0);
 		this->show();
 		}
@@ -130,14 +135,16 @@ void AddEditIfWindow::on_button_apply_clicked()
 
 	int group=this->ui->comboGroup->currentData().toInt();
 
+	int type = this->ui->comboIfType->currentData().toInt();
+
 	if(id == 0)
 		{
-		emit addInterface(ip, mask, name, mac, user, domain, description, inUse,group,location,dhcp);
+		emit addInterface(ip, mask, name, mac, user, domain, description, inUse,group,location,dhcp,type);
 		this->close();
 		}
 	else
 		{
-		emit updateInterface(id, ip, mask, name, mac, user, domain, description, inUse,group,location,dhcp);
+		emit updateInterface(id, ip, mask, name, mac, user, domain, description, inUse,group,location,dhcp,type);
 		this->close();
 		}
 	}

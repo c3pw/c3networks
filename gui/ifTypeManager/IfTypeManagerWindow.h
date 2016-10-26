@@ -30,6 +30,7 @@ class IfTypeManagerWindow : public QDialog
 		IfTypeTableModel *model;
 	signals:
 		void deleteIfType(int id);
+		void refreshDatabase();
 	};
 
 #endif // IFTYPEMANAGERWINDOW_H

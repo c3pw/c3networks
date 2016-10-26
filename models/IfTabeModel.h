@@ -12,8 +12,8 @@ class IfTabeModel : public QAbstractTableModel
         Q_OBJECT
     public:
         IfTabeModel(QObject *parent=0);
-        static const int COL_COUNT = 8;
-        enum COL_TYPE {IP,NAME,DHCPRESERVATION,MAC,USERNAME,LOCATION,HOSTDOMAIN,DESCRIPTION};
+		static const int COL_COUNT = 9;
+		enum COL_TYPE {IP,NAME,IFTYPE,DHCPRESERVATION,MAC,USERNAME,LOCATION,HOSTDOMAIN,DESCRIPTION};
     private:
         bool dataLoading;
         QList<InterfaceItem*> interfaces;
@@ -23,6 +23,7 @@ class IfTabeModel : public QAbstractTableModel
         QVariant dataToolTipRole(const QModelIndex &index) const;
         QVariant dataTextAlignmentRole(const QModelIndex &index) const;
         QIcon dhcpOk;
+		QMap<int,QPixmap> interfaceIcons;
     public:
         int rowCount(const QModelIndex &parent) const override;
         int columnCount(const QModelIndex &parent) const override;
@@ -31,6 +32,7 @@ class IfTabeModel : public QAbstractTableModel
         QPointer<InterfaceItem> getInterfaceItem(QModelIndex index);
     public slots:
         void loadData();
+		void loadInterfaceIcons();
     signals:
         void modelAboutToBeReset();
         void modelReset();

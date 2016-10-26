@@ -11,20 +11,13 @@ IfDbTable::IfDbTable(QObject *parent) : QObject(parent)
 	{
 	}
 
-void IfDbTable::addInterface(quint32 ipAddress, quint32 mask, QString name, QString mac, QString userName, QString domain, QString description, bool inUse, int groupId, QString location, bool dhcpReservation)
+void IfDbTable::addInterface(quint32 ipAddress, quint32 mask, QString name, QString mac, QString userName, QString domain, QString description, bool inUse, int groupId, QString location, bool dhcpReservation, int interfaceId)
 	{
 	QSqlQuery query;
 
-	if(groupId==0)
-		{
-		query.prepare("insert into hosts(ipAddress,mask,name,mac,userName,domain,description,inUse,location,dhcpReservation) values(:ipAddress,:mask,:name,:mac,:userName,:domain,:description,:inUse,:location,:dhcpReservation);");
-		}
-	else
-		{
-		query.prepare("insert into hosts(ipAddress,mask,name,mac,userName,domain,description,inUse,groupId,location,dhcpReservation)"
-					  " values(:ipAddress,:mask,:name,:mac,:userName,:domain,:description,:inUse,:group,:location,:dhcpReservation);");
-		query.bindValue(":group",groupId);
-		}
+	query.prepare("insert into hosts(ipAddress,mask,name,mac,userName,domain,description,inUse,groupId,location,dhcpReservation,interfaceId)"
+					  " values(:ipAddress,:mask,:name,:mac,:userName,:domain,:description,:inUse,:groupId,:location,:dhcpReservation,:interfaceId);");
+
 
 	query.bindValue(":ipAddress",ipAddress);
 	query.bindValue(":mask",mask);
@@ -36,10 +29,22 @@ void IfDbTable::addInterface(quint32 ipAddress, quint32 mask, QString name, QStr
 	query.bindValue(":inUse",inUse);
 	query.bindValue(":location",location);
 	query.bindValue(":dhcpReservation",dhcpReservation);
+	query.bindValue(":groupId",groupId);
+	query.bindValue(":interfaceId",interfaceId);
+
+	if(groupId==0) { query.bindValue(":groupId",QVariant()); }
+	if(interfaceId==0) { query.bindValue(":interfaceId",QVariant()); }
+
 
 	if(query.exec())
 		{
 		emit prepareToModelReset();
+		}
+	else
+		{
+		qDebug()<<query.lastError().text();
+		qDebug()<<query.lastQuery();
+		qDebug()<<query.boundValues();
 		}
 	}
 
@@ -76,12 +81,13 @@ void IfDbTable::addInterfaces(quint32 from, quint32 to, quint32 mask, int groupI
 	}
 
 void IfDbTable::updateInterface(int id, quint32 ipAddress, quint32 mask, QString name, QString mac,
-								QString userName, QString domain, QString description, bool inUse, int groupId, QString location, bool dhcpReservation)
+								QString userName, QString domain, QString description, bool inUse,
+								int groupId, QString location, bool dhcpReservation,int interfaceId)
 	{
 	QSqlQuery query;
 	query.prepare("update hosts set ipAddress=:ipAddress, mask=:mask, name=:name, mac=:mac,"
 				  "userName=:userName, domain=:domain,description=:description,inUse=:inUse, groupId=:groupId, location=:location"
-				  ",dhcpReservation=:dhcpReservation where id=:id");
+				  ",dhcpReservation=:dhcpReservation,interfaceId=:interfaceId where id=:id");
 	query.bindValue(":ipAddress",ipAddress);
 	query.bindValue(":mask",mask);
 	query.bindValue(":name",name);
@@ -93,14 +99,12 @@ void IfDbTable::updateInterface(int id, quint32 ipAddress, quint32 mask, QString
 	query.bindValue(":location",location);
 	query.bindValue(":dhcpReservation",dhcpReservation);
 	query.bindValue(":id",id);
-	if(groupId==0)
-		{
-		query.bindValue(":groupId",QVariant());
-		}
-	else
-		{
-		query.bindValue(":groupId",groupId);
-		}
+	query.bindValue(":groupId",groupId);
+	query.bindValue(":interfaceId",interfaceId);
+
+	if(groupId==0) { query.bindValue(":groupId",QVariant()); }
+
+	if(interfaceId==0) { query.bindValue(":interfaceId",QVariant()); }
 
 
 	if(query.exec())

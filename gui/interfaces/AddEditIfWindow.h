@@ -6,6 +6,7 @@
 #include "../validators/IPValidator.h"
 #include "../validators/NetMaskValidator.h"
 #include "../validators/MacValidator.h"
+#include "../../models/IfTypeTableModel.h"
 
 #include <QCompleter>
 
@@ -27,6 +28,7 @@ class AddEditIfWindow : public QDialog
 		int id;
 		QList<quint32> masks;
 		GrTableModel model;
+		IfTypeTableModel typeModel;
 		IpValidator ipValidator;
 		NetMaskValidator netMAskValidator;
 		MacValidator macValidator;
@@ -39,11 +41,11 @@ class AddEditIfWindow : public QDialog
 		void addInterface(quint32 ipAddress, quint32 mask,
 						  QString name, QString mac, QString userName,
 						  QString domain,QString description, bool inUse,
-						  int groupId, QString location, bool dhcpReservation);
+						  int groupId, QString location, bool dhcpReservation,int interfaceType);
 		void updateInterface(int id,quint32 ipAddress, quint32 mask,
 							 QString name, QString mac, QString userName,
 							 QString domain,QString description, bool inUse,
-							 int groupId, QString location, bool dhcpReservation);
+							 int groupId, QString location, bool dhcpReservation,int interfaceType);
 	};
 
 #endif // ADDEDITHOSTFORM_H

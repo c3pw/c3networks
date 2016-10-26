@@ -32,6 +32,7 @@ QVariant IfTabeModel::dataDisplayRole(const QModelIndex &index) const
                 case LOCATION:{return item->getLocation();}
                 case HOSTDOMAIN:{return item->getDomain();}
                 case DESCRIPTION:{return item->getDescription();}
+				case IFTYPE:{return item->getInterfaceTypeName();}
                 }
             }
         }
@@ -40,22 +41,38 @@ QVariant IfTabeModel::dataDisplayRole(const QModelIndex &index) const
 
 QVariant IfTabeModel::dataDecorationRole(const QModelIndex &index) const
     {
-    if(index.row()>=0 && index.row()<interfaces.count()&& index.column()==0)
+	if(index.row()>=0 && index.row()<interfaces.count())
         {
-        QPointer<InterfaceItem> item = static_cast<InterfaceItem*>(interfaces.at(index.row()));
+		QPointer<InterfaceItem> item = static_cast<InterfaceItem*>(interfaces.at(index.row()));
+		if(index.column()==IP)
+			{
+			if(!item.isNull())
+				{
+				QPixmap pixmap(16,16);
+				QPainter painter(&pixmap);
+				painter.fillRect(0,0,16,16,QBrush(QColor("#c0c0c0")));
 
-        if(!item.isNull())
-            {
-            QPixmap pixmap(16,16);
-            QPainter painter(&pixmap);
-            painter.fillRect(0,0,16,16,QBrush(QColor("#c0c0c0")));
+				QString color = item->getColor();
+				if(color.isEmpty()){color="#FFF";}
+				painter.fillRect(1,1,14,14,QBrush(QColor(color)));
+				painter.end();
+				return pixmap;
+				}
+			}
+		if(index.column()==IFTYPE)
+			{
+			if(!item.isNull() && (this->interfaceIcons.keys().contains(item->getInterfaceType())))
+				{
+				return this->interfaceIcons.value(item->getInterfaceType());
+				}
+			else
+				{
+				QPixmap pixmap(16,16);
+				pixmap.fill(Qt::transparent);
+				return pixmap;
+				}
 
-            QString color = item->getColor();
-            if(color.isEmpty()){color="#FFF";}
-            painter.fillRect(1,1,14,14,QBrush(QColor(color)));
-            painter.end();
-            return QIcon(pixmap);
-            }
+			}
         }
 
     if(index.row()>=0 && index.row()<interfaces.count()&& index.column()==DHCPRESERVATION)
@@ -135,7 +152,7 @@ QVariant IfTabeModel::data(const QModelIndex &index, int role) const
         case Qt::DecorationRole: {return dataDecorationRole(index);}
         case Qt::ForegroundRole: {return dataForegroundRole(index);}
         case Qt::ToolTipRole: {return dataToolTipRole(index);}
-    case Qt::TextAlignmentRole: {return dataTextAlignmentRole(index);}
+		case Qt::TextAlignmentRole: {return dataTextAlignmentRole(index);}
         }
     return QVariant();
     }
@@ -152,8 +169,9 @@ QVariant IfTabeModel::headerData(int section, Qt::Orientation orientation, int r
             case MAC:{return tr("Mac Address");}
             case USERNAME:{return tr("User Name");}
             case LOCATION:{return tr("Location");}
-            case HOSTDOMAIN:{return tr("Domain");}
-            case DESCRIPTION:{return tr("Description");}
+			case HOSTDOMAIN:{return tr("Domain");}
+			case DESCRIPTION:{return tr("Description");}
+			case IFTYPE:{return tr("Interface type");}
             }
         }
     return QVariant();
@@ -177,6 +195,8 @@ void IfTabeModel::loadData()
     dataLoading = true;
 
 
+	loadInterfaceIcons();
+
     qDebug()<<"\tcleaning";
     while(!interfaces.isEmpty())
         {
@@ -187,8 +207,9 @@ void IfTabeModel::loadData()
     query.prepare("select hosts.id as id, hosts.ipAddress as ipAddress,hosts.dhcpReservation as dhcpReservation, hosts.mask as mask, hosts.name as name, "
                   "hosts.mac as mac, hosts.userName as userName, hosts.domain as domain, hosts.description as description, "
                   "hosts.inUse as inUse, hosts.groupId as groupId, hosts.location as location, groups.name as groupName, "
-                  "groups.color as color "
-                  "from hosts left join groups on hosts.groupId = groups.id order by hosts.ipAddress;");
+				  "groups.color as color, hosts.interfaceId as interfaceId, interfaces.name as interfaceName "
+				  "from hosts left join groups on hosts.groupId = groups.id "
+				  "left join interfaces on hosts.interfaceId = interfaces.id order by hosts.ipAddress;");
     if(query.exec())
         {
         while(query.next())
@@ -208,12 +229,15 @@ void IfTabeModel::loadData()
             item->setGroupName(query.value("groupName").toString());
             item->setLocation(query.value("location").toString());
             item->setColor(query.value("color").toString());
+			item->setInterfaceType(query.value("interfaceId").toInt());
+			item->setInterfaceTypeName(query.value("interfaceName").toString());
             interfaces.append(item);
             }
         }
     else
         {
         qDebug()<<query.lastError().text();
+		qDebug()<<query.lastQuery();
         }
 
 
@@ -221,4 +245,18 @@ void IfTabeModel::loadData()
     qDebug()<<"\tloaded items: "<<interfaces.count();
     emit modelReset();
 
-    }
+	}
+
+void IfTabeModel::loadInterfaceIcons()
+	{
+	this->interfaceIcons.clear();
+	QSqlQuery q("select * from interfaces order by id;");
+	if(q.exec())
+		{
+		while(q.next())
+			{QPixmap p;
+			p.loadFromData(q.value("icon").toByteArray());
+			this->interfaceIcons.insert(q.value("id").toInt(),p);
+			}
+		}
+	}

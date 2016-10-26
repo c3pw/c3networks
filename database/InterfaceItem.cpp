@@ -143,4 +143,24 @@ bool InterfaceItem::getDhcpReservation() const
 void InterfaceItem::setDhcpReservation(bool value)
 	{
 	dhcpReservation = value;
+    }
+
+int InterfaceItem::getInterfaceType() const
+    {
+    return interfaceType;
+    }
+
+void InterfaceItem::setInterfaceType(int value)
+    {
+    interfaceType = value;
+	}
+
+QString InterfaceItem::getInterfaceTypeName() const
+	{
+	return interfaceTypeName;
+	}
+
+void InterfaceItem::setInterfaceTypeName(const QString& value)
+	{
+	interfaceTypeName = value;
 	}

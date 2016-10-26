@@ -24,6 +24,7 @@ IfTypeManagerWindow::~IfTypeManagerWindow()
 
 void IfTypeManagerWindow::on_buttonClose_clicked()
 {
+	emit this->refreshDatabase();
 	this->close();
 }
 

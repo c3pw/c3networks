@@ -9,6 +9,7 @@
 IfTypeTableModel::IfTypeTableModel(QObject *parent)
 	: QAbstractListModel(parent)
 	{
+	this->comboMode = false;
 	}
 
 QVariant IfTypeTableModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -34,6 +35,10 @@ QVariant IfTypeTableModel::data(const QModelIndex &index, int role) const
 			{
 			return source.at(index.row())->getName();
 			}
+		if(role==Qt::UserRole)
+			{
+			return source.at(index.row())->getId();
+			}
 		if(role==Qt::DecorationRole)
 			{
 			QPixmap icon = source.at(index.row())->getIcon();
@@ -57,13 +62,37 @@ InterfaceTypeItem*IfTypeTableModel::getItem(int index)
 	return NULL;
 	}
 
+void IfTypeTableModel::setComboMode(bool mode)
+	{
+	this->comboMode = mode;
+	}
+
+int IfTypeTableModel::idRow(int id)
+	{
+	for(int i=0; i< this->source.count(); i++)
+		{
+		if(source.at(i)->getId() == id)
+			{
+			return i;
+			}
+		}
+	return 0;
+	}
+
 void IfTypeTableModel::loadData()
 	{
 	emit modelAboutToBeReset();
+	source.clear();
+	if(comboMode)
+		{
+		QPixmap p;
+		p.scaled(16,16);
+		p.fill(Qt::transparent);
+		source.append(new InterfaceTypeItem(0,"---",p));
+		}
 	QSqlQuery q("select * from interfaces order by name;");
 	if(q.exec())
 		{
-		source.clear();
 		QPixmap p;
 		while(q.next())
 			{

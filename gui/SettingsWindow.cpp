@@ -1,6 +1,8 @@
 #include "SettingsWindow.h"
 #include "ui_SettingsWindow.h"
 #include "global/LocalSettings.h"
+#include <QFileDialog>
+#include <QDebug>
 
 
 SettingsWindow::SettingsWindow(QWidget *parent) : QDialog(parent), ui(new Ui::SettingsWindow)
@@ -34,6 +36,7 @@ void SettingsWindow::on_buttonSave_clicked()
 	s.setValue("rememberFilterMode",this->ui->rememberFilterMode_YES->isChecked());
 	s.setValue("filterHilightColor",this->ui->filterHilightColor->text());
 	s.setValue("cp852conversion",this->ui->cp852conversion_YES->isChecked());
+	s.setValue("vproPath",this->ui->vproPath->text());
 
 	this->close();
 	}
@@ -80,4 +83,15 @@ void SettingsWindow::loadSettings()
 		{
 		this->ui->cp852conversion_NO->setChecked(true);
 		}
+
+	this->ui->vproPath->setText(s.value("vproPath","").toString());
+	}
+
+void SettingsWindow::on_vproPathButton_clicked()
+	{
+		QString path = QFileDialog::getExistingDirectory(this,tr("Select folder"),this->ui->vproPath->text());
+		if(!path.isEmpty())
+			{
+			this->ui->vproPath->setText(path);
+			}
 	}

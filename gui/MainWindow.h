@@ -69,6 +69,8 @@ class MainWindow : public QMainWindow
 
 		void on_actionInterface_Types_triggered();
 
+		void on_actionVpro_triggered();
+
 	private:
 		Ui::MainWindow *ui;
 		IfDbTable ifDbTable;

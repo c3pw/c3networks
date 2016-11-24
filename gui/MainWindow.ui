@@ -590,6 +590,11 @@
     <string>Device Groups</string>
    </property>
   </action>
+  <action name="actionVpro">
+   <property name="text">
+    <string>VPRO</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

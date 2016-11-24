@@ -28,6 +28,8 @@ private slots:
 
 	void loadSettings();
 
+	void on_vproPathButton_clicked();
+
 	private:
     Ui::SettingsWindow *ui;
 	QColorDialog filterHilightColorDialog;

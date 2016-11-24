@@ -16,13 +16,13 @@ class IfDbTable : public QObject
 		void addInterface(quint32 ipAddress, quint32 mask,
 						  QString name, QString mac, QString userName,
 						  QString domain,QString description, bool inUse,
-						  int groupId, QString location, bool dhcpReservation,int interfaceId);
+						  int groupId, QString location, bool dhcpReservation,int interfaceId,QString switchPort);
 		void addInterfaces(quint32 from, quint32 to, quint32 mask,
 						   int groupId);
 		void updateInterface(int id, quint32 ipAddress, quint32 mask,
 							 QString name, QString mac, QString userName,
 							 QString domain, QString description, bool inUse,
-							 int groupId, QString location, bool dhcpReservation, int interfaceId);
+							 int groupId, QString location, bool dhcpReservation, int interfaceId,QString switchPort);
 		void deleteInterfaces(QList<int> idx);
 		void changeGroup(QList<int> idx,int group);
 		void exportAllToCSV(QString filename,bool chId, bool chIp, bool chMask, bool chName, bool chMac,

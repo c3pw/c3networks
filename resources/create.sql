@@ -35,6 +35,7 @@ CREATE TABLE hosts
     dhcpReservation numeric default 0,
     deviceId integer default null,
     interfaceId integer default null,
+    switchPort varchar(256) default null,
     FOREIGN KEY(groupId) REFERENCES groups(id),
     FOREIGN KEY(deviceId) REFERENCES devices(id),
     FOREIGN KEY(interfaceId) REFERENCES interfaces(id)
@@ -45,4 +46,4 @@ CREATE TABLE versions
     time datetime not null
     );
 
-insert into versions values(4,datetime('now'));
+insert into versions values(5,datetime('now'));

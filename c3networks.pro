@@ -11,7 +11,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = c3Networks
 TEMPLATE = app
 
-VERSION = 0.0.1.2
+VERSION = 0.0.1.3
 
 SOURCES += main.cpp \
     database/IfDbTable.cpp \
@@ -121,4 +121,5 @@ DISTFILES += \
     resources/u1to2.sql \
     resources/u2to3.sql \
     c3Network.ico \
-    resources/u3to4.sql
+    resources/u3to4.sql \
+    resources/u4to5.sql

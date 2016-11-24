@@ -81,6 +81,7 @@ void AddEditIfWindow::updateInterface(int id)
 		this->ui->comboGroup->setCurrentIndex(this->model.idRow(query.value("groupId").toInt()));
 		this->ui->comboIfType->setCurrentIndex(this->typeModel.idRow(query.value("interfaceId").toInt()));
 		this->ui->check_dhcpReservation->setChecked(query.value("dhcpReservation").toInt()!=0);
+		this->ui->edit_switchPort->setText(query.value("switchPort").toString());
 		this->show();
 		}
 	}
@@ -131,6 +132,7 @@ void AddEditIfWindow::on_button_apply_clicked()
 	QString domain = this->ui->edit_domain->text();
 	QString description = this->ui->edit_description->toPlainText();
 	QString location = this->ui->edit_location->text();
+	QString switchPort = this->ui->edit_switchPort->text();
 	bool dhcp = this->ui->check_dhcpReservation->isChecked();
 
 	int group=this->ui->comboGroup->currentData().toInt();
@@ -139,12 +141,12 @@ void AddEditIfWindow::on_button_apply_clicked()
 
 	if(id == 0)
 		{
-		emit addInterface(ip, mask, name, mac, user, domain, description, inUse,group,location,dhcp,type);
+		emit addInterface(ip, mask, name, mac, user, domain, description, inUse,group,location,dhcp,type,switchPort);
 		this->close();
 		}
 	else
 		{
-		emit updateInterface(id, ip, mask, name, mac, user, domain, description, inUse,group,location,dhcp,type);
+		emit updateInterface(id, ip, mask, name, mac, user, domain, description, inUse,group,location,dhcp,type,switchPort);
 		this->close();
 		}
 	}

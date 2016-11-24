@@ -15,7 +15,7 @@ class DbFileItem : public QObject
 		DbFileItem(const DbFileItem &source, QObject *parent = 0);
 		void operator =(const DbFileItem &source);
 
-		static const int version = 4;
+		static const int version = 5;
 
 		QString getFileName() const;
 		void setFileName(const QString &value);

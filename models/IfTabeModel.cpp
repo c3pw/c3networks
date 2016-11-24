@@ -33,6 +33,7 @@ QVariant IfTabeModel::dataDisplayRole(const QModelIndex &index) const
                 case HOSTDOMAIN:{return item->getDomain();}
                 case DESCRIPTION:{return item->getDescription();}
 				case IFTYPE:{return item->getInterfaceTypeName();}
+				case SWITCHPORT:{return item->getSwitchPort();}
                 }
             }
         }
@@ -172,6 +173,7 @@ QVariant IfTabeModel::headerData(int section, Qt::Orientation orientation, int r
 			case HOSTDOMAIN:{return tr("Domain");}
 			case DESCRIPTION:{return tr("Description");}
 			case IFTYPE:{return tr("Interface type");}
+			case SWITCHPORT:{return tr("Switch port");}
             }
         }
     return QVariant();
@@ -207,7 +209,7 @@ void IfTabeModel::loadData()
     query.prepare("select hosts.id as id, hosts.ipAddress as ipAddress,hosts.dhcpReservation as dhcpReservation, hosts.mask as mask, hosts.name as name, "
                   "hosts.mac as mac, hosts.userName as userName, hosts.domain as domain, hosts.description as description, "
                   "hosts.inUse as inUse, hosts.groupId as groupId, hosts.location as location, groups.name as groupName, "
-				  "groups.color as color, hosts.interfaceId as interfaceId, interfaces.name as interfaceName "
+				  "groups.color as color, hosts.interfaceId as interfaceId, interfaces.name as interfaceName ,hosts.switchPort as switchPort "
 				  "from hosts left join groups on hosts.groupId = groups.id "
 				  "left join interfaces on hosts.interfaceId = interfaces.id order by hosts.ipAddress;");
     if(query.exec())
@@ -231,6 +233,7 @@ void IfTabeModel::loadData()
             item->setColor(query.value("color").toString());
 			item->setInterfaceType(query.value("interfaceId").toInt());
 			item->setInterfaceTypeName(query.value("interfaceName").toString());
+			item->setSwitchPort(query.value("switchPort").toString());
             interfaces.append(item);
             }
         }

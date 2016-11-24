@@ -56,6 +56,9 @@ class InterfaceItem : public QObject
 		QString getInterfaceTypeName() const;
 		void setInterfaceTypeName(const QString& value);
 
+		QString getSwitchPort() const;
+		void setSwitchPort(const QString& value);
+
 	private:
 		int id;
 		quint32 ipAddress;
@@ -73,6 +76,7 @@ class InterfaceItem : public QObject
 		bool dhcpReservation;
 		int interfaceType;
 		QString interfaceTypeName;
+		QString switchPort;
 	};
 
 #endif // INTERFACEITEM_H

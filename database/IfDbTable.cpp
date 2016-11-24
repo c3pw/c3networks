@@ -11,12 +11,16 @@ IfDbTable::IfDbTable(QObject *parent) : QObject(parent)
 	{
 	}
 
-void IfDbTable::addInterface(quint32 ipAddress, quint32 mask, QString name, QString mac, QString userName, QString domain, QString description, bool inUse, int groupId, QString location, bool dhcpReservation, int interfaceId)
+void IfDbTable::addInterface(quint32 ipAddress, quint32 mask, QString name, QString mac, QString userName,
+							 QString domain, QString description, bool inUse, int groupId, QString location,
+							 bool dhcpReservation, int interfaceId, QString switchPort)
 	{
 	QSqlQuery query;
 
-	query.prepare("insert into hosts(ipAddress,mask,name,mac,userName,domain,description,inUse,groupId,location,dhcpReservation,interfaceId)"
-					  " values(:ipAddress,:mask,:name,:mac,:userName,:domain,:description,:inUse,:groupId,:location,:dhcpReservation,:interfaceId);");
+	query.prepare("insert into hosts(ipAddress,mask,name,mac,userName,domain,description,"
+				  "inUse,groupId,location,dhcpReservation,interfaceId,switchPort) "
+				  "values(:ipAddress,:mask,:name,:mac,:userName,:domain,:description,"
+				  ":inUse,:groupId,:location,:dhcpReservation,:interfaceId,:switchPort);");
 
 
 	query.bindValue(":ipAddress",ipAddress);
@@ -31,6 +35,7 @@ void IfDbTable::addInterface(quint32 ipAddress, quint32 mask, QString name, QStr
 	query.bindValue(":dhcpReservation",dhcpReservation);
 	query.bindValue(":groupId",groupId);
 	query.bindValue(":interfaceId",interfaceId);
+	query.bindValue(":switchPort",switchPort);
 
 	if(groupId==0) { query.bindValue(":groupId",QVariant()); }
 	if(interfaceId==0) { query.bindValue(":interfaceId",QVariant()); }
@@ -82,12 +87,12 @@ void IfDbTable::addInterfaces(quint32 from, quint32 to, quint32 mask, int groupI
 
 void IfDbTable::updateInterface(int id, quint32 ipAddress, quint32 mask, QString name, QString mac,
 								QString userName, QString domain, QString description, bool inUse,
-								int groupId, QString location, bool dhcpReservation,int interfaceId)
+								int groupId, QString location, bool dhcpReservation,int interfaceId,QString switchPort)
 	{
 	QSqlQuery query;
 	query.prepare("update hosts set ipAddress=:ipAddress, mask=:mask, name=:name, mac=:mac,"
 				  "userName=:userName, domain=:domain,description=:description,inUse=:inUse, groupId=:groupId, location=:location"
-				  ",dhcpReservation=:dhcpReservation,interfaceId=:interfaceId where id=:id");
+				  ",dhcpReservation=:dhcpReservation,interfaceId=:interfaceId,switchPort=:switchPort where id=:id");
 	query.bindValue(":ipAddress",ipAddress);
 	query.bindValue(":mask",mask);
 	query.bindValue(":name",name);
@@ -101,6 +106,7 @@ void IfDbTable::updateInterface(int id, quint32 ipAddress, quint32 mask, QString
 	query.bindValue(":id",id);
 	query.bindValue(":groupId",groupId);
 	query.bindValue(":interfaceId",interfaceId);
+	query.bindValue(":switchPort",switchPort);
 
 	if(groupId==0) { query.bindValue(":groupId",QVariant()); }
 

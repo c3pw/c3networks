@@ -41,11 +41,11 @@ class AddEditIfWindow : public QDialog
 		void addInterface(quint32 ipAddress, quint32 mask,
 						  QString name, QString mac, QString userName,
 						  QString domain,QString description, bool inUse,
-						  int groupId, QString location, bool dhcpReservation,int interfaceType);
+						  int groupId, QString location, bool dhcpReservation,int interfaceType,QString switchPort);
 		void updateInterface(int id,quint32 ipAddress, quint32 mask,
 							 QString name, QString mac, QString userName,
 							 QString domain,QString description, bool inUse,
-							 int groupId, QString location, bool dhcpReservation,int interfaceType);
+							 int groupId, QString location, bool dhcpReservation,int interfaceType,QString switchPort);
 	};
 
 #endif // ADDEDITHOSTFORM_H

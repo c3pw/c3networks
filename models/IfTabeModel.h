@@ -12,8 +12,8 @@ class IfTabeModel : public QAbstractTableModel
         Q_OBJECT
     public:
         IfTabeModel(QObject *parent=0);
-		static const int COL_COUNT = 9;
-		enum COL_TYPE {IP,NAME,IFTYPE,DHCPRESERVATION,MAC,USERNAME,LOCATION,HOSTDOMAIN,DESCRIPTION};
+		static const int COL_COUNT = 10;
+		enum COL_TYPE {IP,NAME,IFTYPE,DHCPRESERVATION,MAC,USERNAME,LOCATION,SWITCHPORT,HOSTDOMAIN,DESCRIPTION};
     private:
         bool dataLoading;
         QList<InterfaceItem*> interfaces;

@@ -108,6 +108,7 @@ QStringList DbFileItem::prepareUpdateScript()
 	for(int i=v;i<this->version;i++)
 		{
 		scriptName = ":/db/u"+QString::number(i)+"to"+QString::number(i+1)+".sql";
+		qDebug()<<scriptName;
 		f.setFileName(scriptName);
 		if(f.exists())
 			{
@@ -119,6 +120,7 @@ QStringList DbFileItem::prepareUpdateScript()
 				}
 			}
 		}
+	qDebug()<<script;
 	return script;
 	}
 

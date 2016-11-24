@@ -57,8 +57,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 	this->ui->ifTableFilterBox->insertItem(3,tr("MAC Address"),IfTabeModel::MAC);
 	this->ui->ifTableFilterBox->insertItem(4,tr("User Name"),IfTabeModel::USERNAME);
 	this->ui->ifTableFilterBox->insertItem(5,tr("Location"),IfTabeModel::LOCATION);
-	this->ui->ifTableFilterBox->insertItem(6,tr("Domain"),IfTabeModel::HOSTDOMAIN);
-	this->ui->ifTableFilterBox->insertItem(7,tr("Description"),IfTabeModel::DESCRIPTION);
+	this->ui->ifTableFilterBox->insertItem(6,tr("Switch port"),IfTabeModel::SWITCHPORT);
+	this->ui->ifTableFilterBox->insertItem(7,tr("Domain"),IfTabeModel::HOSTDOMAIN);
+	this->ui->ifTableFilterBox->insertItem(8,tr("Description"),IfTabeModel::DESCRIPTION);
 
 	this->ui->tabWidget->setCurrentIndex(0);
 
@@ -86,8 +87,8 @@ void MainWindow::on_pushButton_clicked()
     {
     AddEditIfWindow *w = new AddEditIfWindow(this);
     w->setAttribute(Qt::WA_DeleteOnClose);
-	connect(w,SIGNAL(addInterface(quint32,quint32,QString,QString,QString,QString,QString,bool,int,QString,bool,int)),
-			&ifDbTable,SLOT(addInterface(quint32,quint32,QString,QString,QString,QString,QString,bool,int,QString,bool,int)));
+	connect(w,SIGNAL(addInterface(quint32,quint32,QString,QString,QString,QString,QString,bool,int,QString,bool,int,QString)),
+			&ifDbTable,SLOT(addInterface(quint32,quint32,QString,QString,QString,QString,QString,bool,int,QString,bool,int,QString)));
     w->addInterface();
     }
 
@@ -105,8 +106,8 @@ void MainWindow::on_buttonEditHost_clicked()
             {
             AddEditIfWindow *w = new AddEditIfWindow(this);
             w->setAttribute(Qt::WA_DeleteOnClose);
-			connect(w,SIGNAL(updateInterface(int,quint32,quint32,QString,QString,QString,QString,QString,bool,int,QString,bool,int)),
-					&ifDbTable,SLOT(updateInterface(int,quint32,quint32,QString,QString,QString,QString,QString,bool,int,QString,bool,int)));
+			connect(w,SIGNAL(updateInterface(int,quint32,quint32,QString,QString,QString,QString,QString,bool,int,QString,bool,int,QString)),
+					&ifDbTable,SLOT(updateInterface(int,quint32,quint32,QString,QString,QString,QString,QString,bool,int,QString,bool,int,QString)));
             w->updateInterface(item->getId());
             }
         }

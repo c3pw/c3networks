@@ -163,4 +163,14 @@ QString InterfaceItem::getInterfaceTypeName() const
 void InterfaceItem::setInterfaceTypeName(const QString& value)
 	{
 	interfaceTypeName = value;
-	}
+    }
+
+QString InterfaceItem::getSwitchPort() const
+    {
+    return switchPort;
+    }
+
+void InterfaceItem::setSwitchPort(const QString& value)
+    {
+    switchPort = value;
+    }

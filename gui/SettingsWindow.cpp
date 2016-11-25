@@ -37,6 +37,7 @@ void SettingsWindow::on_buttonSave_clicked()
 	s.setValue("filterHilightColor",this->ui->filterHilightColor->text());
 	s.setValue("cp852conversion",this->ui->cp852conversion_YES->isChecked());
 	s.setValue("vproPath",this->ui->vproPath->text());
+	s.setValue("vproExtension",this->ui->vproExtension->text());
 
 	this->close();
 	}
@@ -85,6 +86,7 @@ void SettingsWindow::loadSettings()
 		}
 
 	this->ui->vproPath->setText(s.value("vproPath","").toString());
+	this->ui->vproExtension->setText(s.value("vproExtension",".vnc+").toString());
 	}
 
 void SettingsWindow::on_vproPathButton_clicked()

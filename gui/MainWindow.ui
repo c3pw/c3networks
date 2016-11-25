@@ -511,6 +511,7 @@
     <addaction name="actionShowArp"/>
     <addaction name="actionDNS1"/>
     <addaction name="actionDNS2"/>
+    <addaction name="actionVpro"/>
    </widget>
    <widget class="QMenu" name="menuDictionaries">
     <property name="title">

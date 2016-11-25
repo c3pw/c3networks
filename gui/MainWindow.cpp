@@ -392,7 +392,7 @@ void MainWindow::on_actionVpro_triggered()
 			if(!item.isNull() && !item->getName().trimmed().isEmpty())
 				{
 				LocalSettings s;
-				QString path = s.value("vproPath").toString()+"/"+item->getName()+".vnc+";
+				QString path = s.value("vproPath").toString()+"/"+item->getName()+s.value("vproExtension",".vnc+").toString();
 				if(QFile(path).exists())
 					{
 					QDesktopServices::openUrl(QUrl::fromLocalFile(path));
@@ -404,7 +404,7 @@ void MainWindow::on_actionVpro_triggered()
 					box.setStandardButtons(QMessageBox::Ok);
 					box.setButtonText(QMessageBox::Ok,tr("Ok"));
 					box.setIcon(QMessageBox::Warning);
-					box.setText(tr("File not found"));
+					box.setText(tr("File \"")+path+tr("\" not found."));
 					box.exec();
 					}
 				}

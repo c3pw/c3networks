@@ -47,11 +47,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
 	rightButtonMenu.insertAction(0,this->ui->actionChangeGroup);
 	rightButtonMenu.addSeparator();
-	rightButtonMenu.addAction(this->ui->actionPing);
-	rightButtonMenu.addAction(this->ui->actionShowArp);
-	rightButtonMenu.addAction(this->ui->actionDNS1);
-	rightButtonMenu.addAction(this->ui->actionDNS2);
-	rightButtonMenu.addAction(this->ui->actionVpro);
+
+	//add Actions
 
 	this->ui->ifTable->setContextMenuPolicy(Qt::CustomContextMenu);
 	this->ui->ifTable->resizeColumnToContents(IfTabeModel::IFTYPE);

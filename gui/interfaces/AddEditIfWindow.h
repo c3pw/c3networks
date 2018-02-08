@@ -3,7 +3,7 @@
 
 #include <QDialog>
 #include "../../models/GrTableModel.h"
-#include "../validators/IPValidator.h"
+#include "../validators/IpValidator.h"
 #include "../validators/NetMaskValidator.h"
 #include "../validators/MacValidator.h"
 #include "../../models/IfTypeTableModel.h"

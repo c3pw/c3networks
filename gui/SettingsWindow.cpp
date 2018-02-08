@@ -35,9 +35,6 @@ void SettingsWindow::on_buttonSave_clicked()
 	LocalSettings s;
 	s.setValue("rememberFilterMode",this->ui->rememberFilterMode_YES->isChecked());
 	s.setValue("filterHilightColor",this->ui->filterHilightColor->text());
-	s.setValue("cp852conversion",this->ui->cp852conversion_YES->isChecked());
-	s.setValue("vproPath",this->ui->vproPath->text());
-	s.setValue("vproExtension",this->ui->vproExtension->text());
 
 	this->close();
 	}
@@ -74,26 +71,4 @@ void SettingsWindow::loadSettings()
 		this->filterHilightColor_changed(QColor(str));
 		this->filterHilightColorDialog.setCurrentColor(QColor(str));
 		}
-
-
-	if(s.value("cp852conversion").toBool())
-		{
-		this->ui->cp852conversion_YES->setChecked(true);
-		}
-	else
-		{
-		this->ui->cp852conversion_NO->setChecked(true);
-		}
-
-	this->ui->vproPath->setText(s.value("vproPath","").toString());
-	this->ui->vproExtension->setText(s.value("vproExtension",".vnc+").toString());
-	}
-
-void SettingsWindow::on_vproPathButton_clicked()
-	{
-		QString path = QFileDialog::getExistingDirectory(this,tr("Select folder"),this->ui->vproPath->text());
-		if(!path.isEmpty())
-			{
-			this->ui->vproPath->setText(path);
-			}
 	}

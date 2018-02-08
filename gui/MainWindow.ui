@@ -99,7 +99,7 @@
           <x>0</x>
           <y>0</y>
           <width>130</width>
-          <height>364</height>
+          <height>363</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -481,7 +481,7 @@
      <x>0</x>
      <y>0</y>
      <width>792</width>
-     <height>21</height>
+     <height>20</height>
     </rect>
    </property>
    <property name="defaultUp">
@@ -507,11 +507,6 @@
     <property name="title">
      <string>Actions</string>
     </property>
-    <addaction name="actionPing"/>
-    <addaction name="actionShowArp"/>
-    <addaction name="actionDNS1"/>
-    <addaction name="actionDNS2"/>
-    <addaction name="actionVpro"/>
    </widget>
    <widget class="QMenu" name="menuDictionaries">
     <property name="title">
@@ -556,26 +551,6 @@
     <string>Export</string>
    </property>
   </action>
-  <action name="actionPing">
-   <property name="text">
-    <string>Send PING</string>
-   </property>
-  </action>
-  <action name="actionShowArp">
-   <property name="text">
-    <string>Show ARP</string>
-   </property>
-  </action>
-  <action name="actionDNS1">
-   <property name="text">
-    <string>Ask DNS (by name)</string>
-   </property>
-  </action>
-  <action name="actionDNS2">
-   <property name="text">
-    <string>Ask DNS (by IP)</string>
-   </property>
-  </action>
   <action name="actionDevice_Types">
    <property name="text">
     <string>Device Types</string>
@@ -589,11 +564,6 @@
   <action name="actionDevice_Groups">
    <property name="text">
     <string>Device Groups</string>
-   </property>
-  </action>
-  <action name="actionVpro">
-   <property name="text">
-    <string>VPRO</string>
    </property>
   </action>
  </widget>

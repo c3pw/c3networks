@@ -109,11 +109,13 @@ void IfTypeTableModel::insert(QString name, QPixmap icon)
 
 	// Preparation of our QPixmap
 	QByteArray bArray;
-	QBuffer buffer(&bArray);
-	buffer.open(QIODevice::WriteOnly);
-	icon.save(&buffer, "PNG");
-	buffer.close();
-
+    if(!icon.isNull())
+        {
+        QBuffer buffer(&bArray);
+        buffer.open(QIODevice::WriteOnly);
+        icon.save(&buffer, "PNG");
+        buffer.close();
+        }
 	QSqlQuery q("insert into interfaces (name,icon) values(:name,:icon);");
 	q.bindValue(0,name);
 	q.bindValue(1,bArray);
@@ -127,10 +129,13 @@ void IfTypeTableModel::update(int id, QString name, QPixmap icon)
 	{
 	// Preparation of our QPixmap
 	QByteArray bArray;
-	QBuffer buffer(&bArray);
-	buffer.open(QIODevice::WriteOnly);
-	icon.save(&buffer, "PNG");
-	buffer.close();
+    if(!icon.isNull())
+        {
+        QBuffer buffer(&bArray);
+        buffer.open(QIODevice::WriteOnly);
+        icon.save(&buffer, "PNG");
+        buffer.close();
+        }
 
 	QSqlQuery q("update interfaces set name=:name,icon=:icon where id=:id;");
 	q.bindValue(2,id);

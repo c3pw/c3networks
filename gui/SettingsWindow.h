@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QColorDialog>
 #include <QMenu>
+#include "../models/ExternalAppModel.h"
 
 namespace Ui {
 class SettingsWindow;
@@ -28,11 +29,18 @@ private slots:
 
 	void loadSettings();
 
-	void on_vproPathButton_clicked();
+	void on_addExtarnalAppButton_clicked();
 
+	void on_removeExtarnalAppButton_clicked();
+
+	void on_editExtarnalAppButton_clicked();
+
+signals:
+    void settingsChanged();
 	private:
     Ui::SettingsWindow *ui;
 	QColorDialog filterHilightColorDialog;
+	ExternalAppModel * externalAppModel;
 };
 
 #endif // SETTINGSWINDOW_H

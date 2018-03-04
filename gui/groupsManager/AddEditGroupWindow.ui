@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>358</width>
-    <height>109</height>
+    <height>111</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -39,10 +39,7 @@
    <item>
     <widget class="QWidget" name="form" native="true">
      <property name="styleSheet">
-      <string notr="true">#form
-	{
-	background-color: rgb(255, 255, 255);
-	}</string>
+      <string notr="true"/>
      </property>
      <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="0">

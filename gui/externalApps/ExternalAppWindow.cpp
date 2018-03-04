@@ -3,30 +3,27 @@
 
 #include <QDebug>
 #include <QScrollBar>
-#include "textCodecs/CP852PLCodec.h"
-#include "../global/LocalSettings.h"
+#include "../textCodecs/CP852PLCodec.h"
+#include "../../global/LocalSettings.h"
 
 ExternalAppWindow::ExternalAppWindow(QWidget *parent) : QDialog(parent), ui(new Ui::ExternalAppWindow)
 	{
 	this->process = new QProcess();
-	connect( process, SIGNAL(readyReadStandardOutput()), SLOT(onStdoutAvailable()) );
+    //connect( process, SIGNAL(readyReadStandardOutput()), SLOT(onStdoutAvailable()) );
+    //connect(process,SIGNAL(readyReadStandardError())
+    connect(process,SIGNAL(readyRead()), SLOT(onStdoutAvailable()) );
 	connect( process, SIGNAL(finished(int,QProcess::ExitStatus)), SLOT(onFinished(int,QProcess::ExitStatus)) );
 	ui->setupUi(this);
 	}
 
-void ExternalAppWindow::executeApp(QString app, QStringList params)
+void ExternalAppWindow::executeApp(QString app, bool convert)
 	{
+    this->convert=convert;
 	this->show();
-	QString p;
-	for(int i=0;i<params.count();i++)
-		{
-		p.append(" ").append(params.at(i));
-		}
-	ap = app+p;
-	this->ui->plainTextEdit->appendPlainText("EXECUTE: "+ap+"\n----------------------------------\n\n");
-	this->process->start(app,params);
+    this->ui->plainTextEdit->appendPlainText("EXECUTE: "+app+"\n----------------------------------\n\n");
+    this->process->start(app);
 
-	this->setWindowTitle(ap+" - WORKING");
+    this->setWindowTitle(app +" - WORKING");
 
 	}
 
@@ -38,8 +35,7 @@ ExternalAppWindow::~ExternalAppWindow()
 
 void ExternalAppWindow::onStdoutAvailable()
 	{
-	LocalSettings l;
-	if(l.value("cp852conversion").toBool())
+    if(this->convert)
 		{
 		QString str = CP852PLCodec::fromCP852PL(this->process->readAll());
 		this->ui->plainTextEdit->insertPlainText(str);

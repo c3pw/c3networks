@@ -11,7 +11,7 @@
 #include "../database/InterfaceItem.h"
 #include "groupsManager/GropusManagerWindow.h"
 
-#include "ExternalAppWindow.h"
+#include "../gui/externalApps/ExternalAppWindow.h"
 
 #include <QMessageBox>
 #include <QPointer>
@@ -25,10 +25,12 @@
 #include <QFile>
 #include <QDesktopServices>
 #include <QUrl>
+#include <QProcess>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 	{
 	ui->setupUi(this);
+    connect(&rightSignalMapper,SIGNAL(mapped(QString)),this,SLOT(rightMenuActionClicked(QString)));
 	this->ui->menuBar->insertAction(this->ui->menuBar->actions().at(2),this->ui->actionSettings);
 
 	this->ui->statusBar->addWidget(&(this->dbNameLabel));
@@ -45,8 +47,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 	this->ui->ifTable->sortByColumn(0,Qt::AscendingOrder);
 	this->tableModel->loadData();
 
-	rightButtonMenu.insertAction(0,this->ui->actionChangeGroup);
-	rightButtonMenu.addSeparator();
 
 	//add Actions
 
@@ -71,6 +71,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 MainWindow::~MainWindow()
 	{
 	delete ui;
+    while(this->exActionsList.count()>0)
+        {
+        delete this->exActionsList.takeLast();
+        }
+    while(this->exAppList.count()>0)
+        {
+        delete this->exAppList.takeLast();
+        }
 	}
 
 void MainWindow::on_ifTableFilterEdit_textChanged(const QString &arg1)
@@ -128,8 +136,47 @@ void MainWindow::prepareToModelReset()
 
 void MainWindow::setDbName(QString name)
 	{
-	this->dbNameLabel.setText(tr("Database: ")+name);
-	}
+    this->dbNameLabel.setText(tr("Database: ")+name);
+}
+
+void MainWindow::reloadContextMenu()
+    {
+
+    rightButtonMenu.clear();
+    this->ui->menuActions->clear();
+
+    while(this->exActionsList.count()>0)
+        {
+        QAction *ex = this->exActionsList.takeLast();
+        this->rightSignalMapper.removeMappings(ex);
+        delete ex;
+        }
+    while(this->exAppList.count()>0)
+        {
+        delete this->exAppList.takeLast();
+        }
+
+
+    exAppList = LocalSettings().getExternalAppList();
+    rightButtonMenu.insertAction(0,this->ui->actionChangeGroup);
+    rightButtonMenu.addSeparator();
+
+    for(int i=0;i<exAppList.count();i++)
+        {
+        QAction *a=new QAction(exAppList.at(i)->getName(),this);
+        exActionsList.append(a);
+        connect(a,SIGNAL(triggered(bool)),&rightSignalMapper,SLOT(map()));
+        this->rightSignalMapper.setMapping(a,exAppList.at(i)->getName());
+        }
+
+
+    for(int i=0;i<exActionsList.count();i++)
+        {
+        rightButtonMenu.insertAction(0,exActionsList.at(i));
+        this->ui->menuActions->insertAction(0,exActionsList.at(i));
+        }
+
+    }
 
 void MainWindow::on_actionAbout_Application_triggered()
 	{
@@ -147,6 +194,7 @@ void MainWindow::on_actionSettings_triggered()
 	{
 	SettingsWindow *w = new SettingsWindow(this);
 	w->setAttribute(Qt::WA_DeleteOnClose);
+    connect(w,SIGNAL(settingsChanged()),this,SLOT(reloadContextMenu()));
 	w->show();
 	}
 
@@ -252,31 +300,6 @@ void MainWindow::on_ifTableFilterBox_activated(int index)
 	s.setValue("FilterMethod",index);
 	}
 
-void MainWindow::on_actionPing_triggered()
-	{
-	QList<QModelIndex> list = this->ui->ifTable->selectionModel()->selectedRows();
-	if(list.count()>0)
-		{
-		for(int i=0; i< list.count();i++)
-			{
-			QPointer<InterfaceItem> item = tableModel->getInterfaceItem(tableProxy->mapToSource(list.at(i)));
-			if(!item.isNull())
-				{
-				QStringList params;
-				params << QHostAddress(item->getIpAddress()).toString();
-				executeApp("ping",params);
-				}
-			}
-		}
-	}
-
-void MainWindow::executeApp(QString app, QStringList params)
-	{
-	ExternalAppWindow *w = new ExternalAppWindow();
-	w->setAttribute(Qt::WA_DeleteOnClose);
-	w->executeApp(app,params);
-	}
-
 void MainWindow::loadSettings()
 	{
 	LocalSettings s;
@@ -293,62 +316,10 @@ void MainWindow::loadSettings()
 			this->ui->ifTableFilterModeButton->setChecked(false);
 			}
 		}
+    reloadContextMenu();
 	}
 
-void MainWindow::on_actionShowArp_triggered()
-	{
-	QList<QModelIndex> list = this->ui->ifTable->selectionModel()->selectedRows();
-	if(list.count()>0)
-		{
-		for(int i=0; i< list.count();i++)
-			{
-			QPointer<InterfaceItem> item = tableModel->getInterfaceItem(tableProxy->mapToSource(list.at(i)));
-			if(!item.isNull())
-				{
-				QStringList params;
-				params <<"-a";
-				params << QHostAddress(item->getIpAddress()).toString();
-				executeApp("arp",params);
-				}
-			}
-		}
-	}
 
-void MainWindow::on_actionDNS1_triggered()
-	{
-	QList<QModelIndex> list = this->ui->ifTable->selectionModel()->selectedRows();
-	if(list.count()>0)
-		{
-		for(int i=0; i< list.count();i++)
-			{
-			QPointer<InterfaceItem> item = tableModel->getInterfaceItem(tableProxy->mapToSource(list.at(i)));
-			if(!item.isNull() && !item->getName().trimmed().isEmpty())
-				{
-				QStringList params;
-				params << item->getName();
-				executeApp("nslookup",params);
-				}
-			}
-		}
-	}
-
-void MainWindow::on_actionDNS2_triggered()
-	{
-	QList<QModelIndex> list = this->ui->ifTable->selectionModel()->selectedRows();
-	if(list.count()>0)
-		{
-		for(int i=0; i< list.count();i++)
-			{
-			QPointer<InterfaceItem> item = tableModel->getInterfaceItem(tableProxy->mapToSource(list.at(i)));
-			if(!item.isNull() && !item->getName().trimmed().isEmpty())
-				{
-				QStringList params;
-				params << QHostAddress(item->getIpAddress()).toString();
-				executeApp("nslookup",params);
-				}
-			}
-		}
-	}
 
 void MainWindow::on_tabWidget_currentChanged(int index)
 	{
@@ -378,33 +349,50 @@ void MainWindow::on_actionInterface_Types_triggered()
 
 	}
 
-void MainWindow::on_actionVpro_triggered()
-	{
-	QList<QModelIndex> list = this->ui->ifTable->selectionModel()->selectedRows();
-	if(list.count()>0)
-		{
-		for(int i=0; i< list.count();i++)
-			{
-			QPointer<InterfaceItem> item = tableModel->getInterfaceItem(tableProxy->mapToSource(list.at(i)));
-			if(!item.isNull() && !item->getName().trimmed().isEmpty())
-				{
-				LocalSettings s;
-				QString path = s.value("vproPath").toString()+"/"+item->getName()+s.value("vproExtension",".vnc+").toString();
-				if(QFile(path).exists())
-					{
-					QDesktopServices::openUrl(QUrl::fromLocalFile(path));
-					}
-				else
-					{
-					QMessageBox box(this);
-					box.setWindowTitle(tr("Execute"));
-					box.setStandardButtons(QMessageBox::Ok);
-					box.setButtonText(QMessageBox::Ok,tr("Ok"));
-					box.setIcon(QMessageBox::Warning);
-					box.setText(tr("File \"")+path+tr("\" not found."));
-					box.exec();
-					}
-				}
-			}
-		}
-	}
+void MainWindow::rightMenuActionClicked(QString action)
+    {
+    QList<QModelIndex> list = this->ui->ifTable->selectionModel()->selectedRows();
+    if(list.count()>0)
+        {
+        for(int i=0; i< list.count();i++)
+            {
+            QPointer<InterfaceItem> item = tableModel->getInterfaceItem(tableProxy->mapToSource(list.at(i)));
+            if(!item.isNull())
+                {
+                ExternalAppItem *exApp=NULL;
+                for(int i=0;i<this->exAppList.count();i++)
+                    {
+                    if(this->exAppList.at(i)->getName()==action)
+                        {
+                        exApp=this->exAppList.at(i);
+                        }
+                    }
+                if(exApp!=NULL)
+                    {
+                    QString command = exApp->getCommand();
+                        command = command.replace("%IP",QHostAddress(item->getIpAddress()).toString());
+                        command = command.replace("%HOST",item->getName());
+                        command = command.replace("MAC",item->getMac());
+                        command = command.replace("%USER",item->getUserName());
+                        command = command.replace("%DOMAIN",item->getDomain());
+                        command = command.replace("%DATABASE",this->dbNameLabel.text());
+
+                    if(exApp->getUseInternalWindow()==true)
+                        {
+                        ExternalAppWindow *w = new ExternalAppWindow();
+                        w->setAttribute(Qt::WA_DeleteOnClose);
+                        w->executeApp(command,exApp->getDecodeFromCp852PL());
+                        }
+                    else
+                        {
+                        //QProcess p;
+                        //p.start(command+" "+params);
+                        //p.waitForFinished();
+                        //qDebug()<<p.exitStatus();
+                        QProcess::startDetached(command);
+                        }
+                    }
+                }
+            }
+        }
+    }

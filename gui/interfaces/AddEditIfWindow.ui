@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>289</width>
-    <height>387</height>
+    <width>326</width>
+    <height>446</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -39,11 +39,7 @@
    <item>
     <widget class="QWidget" name="formWidget" native="true">
      <property name="styleSheet">
-      <string notr="true">#formWidget
-	{
-	
-	background-color: rgb(255, 255, 255);
-	}</string>
+      <string notr="true"/>
      </property>
      <layout class="QGridLayout" name="gridLayout">
       <item row="4" column="1">

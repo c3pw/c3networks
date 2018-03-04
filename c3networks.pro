@@ -39,7 +39,6 @@ SOURCES += main.cpp \
     gui/validators/MacValidator.cpp \
     gui/interfaces/AddRangeWindow.cpp \
     gui/ExportWindow.cpp \
-    gui/ExternalAppWindow.cpp \
     gui/textCodecs/CP852PLCodec.cpp \
     global/LocalSettings.cpp \
     database/DatabaseUpdater.cpp \
@@ -47,7 +46,11 @@ SOURCES += main.cpp \
     database/InterfaceTypeItem.cpp \
     models/IfTypeTableModel.cpp \
     gui/ifTypeManager/IfTypeManagerWindow.cpp \
-    gui/ifTypeManager/AddEditIfTypeWindow.cpp
+    gui/ifTypeManager/AddEditIfTypeWindow.cpp \
+    database/ExternalAppItem.cpp \
+    models/ExternalAppModel.cpp \
+    gui/externalApps/AddEditExternalAppWindow.cpp \
+    gui/externalApps/ExternalAppWindow.cpp
 
 HEADERS  += \
     database/IfDbTable.h \
@@ -75,7 +78,6 @@ HEADERS  += \
     gui/validators/MacValidator.h \
     gui/interfaces/AddRangeWindow.h \
     gui/ExportWindow.h \
-    gui/ExternalAppWindow.h \
     gui/textCodecs/CP852PLCodec.h \
     global/LocalSettings.h \
     database/DatabaseUpdater.h \
@@ -83,7 +85,11 @@ HEADERS  += \
     database/InterfaceTypeItem.h \
     models/IfTypeTableModel.h \
     gui/ifTypeManager/IfTypeManagerWindow.h \
-    gui/ifTypeManager/AddEditIfTypeWindow.h
+    gui/ifTypeManager/AddEditIfTypeWindow.h \
+    database/ExternalAppItem.h \
+    models/ExternalAppModel.h \
+    gui/externalApps/AddEditExternalAppWindow.h \
+    gui/externalApps/ExternalAppWindow.h
 
 FORMS    += \
     gui/MainWindow.ui \
@@ -97,12 +103,13 @@ FORMS    += \
     gui/interfaces/ChangeGroupWindow.ui \
     gui/interfaces/AddRangeWindow.ui \
     gui/ExportWindow.ui \
-    gui/ExternalAppWindow.ui \
     gui/selectDb/DatabaseUpdateWindow.ui \
     gui/ifTypeManager/IfTypeManagerWindow.ui \
-    gui/ifTypeManager/AddEditIfTypeWindow.ui
+    gui/ifTypeManager/AddEditIfTypeWindow.ui \
+    gui/externalApps/AddEditExternalAppWindow.ui \
+    gui/externalApps/ExternalAppWindow.ui
 
-CONFIG += c++11
+CONFIG += c++11 #console
 
 CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT
 

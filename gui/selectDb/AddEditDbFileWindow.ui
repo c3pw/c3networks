@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>185</height>
+    <height>187</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -41,10 +41,7 @@
       </sizepolicy>
      </property>
      <property name="styleSheet">
-      <string notr="true">#widget_2
-	{
-	background-color: rgb(255, 255, 255);
-	}</string>
+      <string notr="true"/>
      </property>
      <layout class="QFormLayout" name="formLayout">
       <item row="0" column="0">

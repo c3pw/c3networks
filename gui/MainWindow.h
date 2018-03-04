@@ -6,7 +6,9 @@
 #include "../database/IfDbTable.h"
 #include "../models/IfTabeModel.h"
 #include "../models/IfTableSortProxy.h"
+#include "../database/ExternalAppItem.h"
 #include <QLabel>
+#include <QSignalMapper>
 
 
 namespace Ui {
@@ -24,6 +26,7 @@ class MainWindow : public QMainWindow
 	public slots:
 		void prepareToModelReset();
 		void setDbName(QString name);
+        void reloadContextMenu();
 	private slots:
 		void on_ifTableFilterEdit_textChanged(const QString &arg1);
 
@@ -55,31 +58,26 @@ class MainWindow : public QMainWindow
 
 		void on_ifTableFilterBox_activated(int index);
 
-		void on_actionPing_triggered();
-
-		void on_actionShowArp_triggered();
-
-		void on_actionDNS1_triggered();
-
-		void on_actionDNS2_triggered();
-
 		void on_tabWidget_currentChanged(int index);
 
 		void on_actionDevice_Groups_triggered();
 
 		void on_actionInterface_Types_triggered();
 
-		void on_actionVpro_triggered();
-
+        void rightMenuActionClicked(QString action);
 	private:
 		Ui::MainWindow *ui;
 		IfDbTable ifDbTable;
 		IfTabeModel *tableModel;
 		IfTableSortProxy *tableProxy;
+
+        QList<ExternalAppItem*> exAppList;
+        QList<QAction*> exActionsList;
 		QMenu rightButtonMenu;
+        QSignalMapper rightSignalMapper;
+
 		QLabel dbNameLabel;
 
-		void executeApp(QString app, QStringList params);
 		void loadSettings();
 	signals:
 		void deleteInterfaces(QList<int> idx);

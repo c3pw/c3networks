@@ -63,11 +63,7 @@
    <item>
     <widget class="QWidget" name="form" native="true">
      <property name="styleSheet">
-      <string notr="true">#form
-	{
-	
-	background-color: rgb(255, 255, 255);
-	}</string>
+      <string notr="true"/>
      </property>
      <layout class="QGridLayout" name="gridLayout">
       <property name="topMargin">

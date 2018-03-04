@@ -14,7 +14,7 @@ class ExternalAppWindow : public QDialog
 
 	public:
 		explicit ExternalAppWindow(QWidget *parent = 0);
-		void executeApp(QString app,QStringList params);
+        void executeApp(QString app,bool convert);
 		~ExternalAppWindow();
 	private slots:
 		void onStdoutAvailable();
@@ -23,6 +23,7 @@ class ExternalAppWindow : public QDialog
 		Ui::ExternalAppWindow *ui;
 		QProcess *process;
 		QString ap;
+        bool convert;
 	};
 
 #endif // EXTERNALAPPWINDOW_H

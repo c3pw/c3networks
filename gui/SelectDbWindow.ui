@@ -44,10 +44,7 @@
       </sizepolicy>
      </property>
      <property name="styleSheet">
-      <string notr="true">#widget
-	{
-	background: #FFF;
-	}</string>
+      <string notr="true"/>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <property name="leftMargin">

@@ -4,6 +4,7 @@
 #include <QFileDialog>
 #include <QBuffer>
 #include <QPixmap>
+#include <QDebug>
 
 AddEditIfTypeWindow::AddEditIfTypeWindow(QWidget *parent) :
 	QDialog(parent),
@@ -47,10 +48,15 @@ void AddEditIfTypeWindow::on_toolButton_clicked()
 
 void AddEditIfTypeWindow::on_buttonConfirm_clicked()
 	{
+    qDebug()<<"INSIDE";
 	if(!this->ui->editName->text().trimmed().isEmpty())
 		{
-		QPixmap p = *(this->ui->labelIcon->pixmap());
-		p.scaled(16,16);
+        QPixmap p;
+        if(this->ui->labelIcon->pixmap())
+            {
+            p = *(this->ui->labelIcon->pixmap());
+            p.scaled(16,16);
+            }
 
 		if(id==0)
 			{
